@@ -1,0 +1,12 @@
+.git
+.github
+.claude
+node_modules
+vendor
+storage/logs/*.log
+.env
+.env.*
+!.env.example
+tests
+*.md
+serve.bat

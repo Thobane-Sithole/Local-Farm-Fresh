@@ -1,0 +1,55 @@
+services:
+  - type: web
+    name: local-farm-fresh
+    runtime: docker
+    plan: free
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: Local-Farm-Fresh
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        sync: false
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://local-farm-fresh.onrender.com
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: local-farm-fresh-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: local-farm-fresh-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: local-farm-fresh-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: local-farm-fresh-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: local-farm-fresh-db
+          property: password
+      - key: SESSION_DRIVER
+        value: cookie
+      - key: CACHE_STORE
+        value: database
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: MAIL_MAILER
+        value: log
+      - key: CLOUDINARY_URL
+        sync: false
+
+databases:
+  - name: local-farm-fresh-db
+    plan: free
