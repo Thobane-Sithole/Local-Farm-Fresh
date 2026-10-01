@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        /* Direct values — @apply with custom colors is unreliable in JIT if the class isn't in blade files */
+        background-color: #F8FAF7;
+        color: #18352A;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* One consistent, clearly visible keyboard focus style everywhere. */
+    :focus-visible {
+        @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+}
+
+@layer components {
+    /* Curved crop-row pattern used on deep-green brand panels. */
+    .bg-furrows {
+        background-color: theme('colors.brand.900');
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='120' viewBox='0 0 240 120'%3E%3Cg fill='none' stroke='%2343B85F' stroke-opacity='.14' stroke-width='2'%3E%3Cpath d='M-20 30c60-24 120-24 180 0s120 24 180 0'/%3E%3Cpath d='M-20 70c60-24 120-24 180 0s120 24 180 0'/%3E%3Cpath d='M-20 110c60-24 120-24 180 0s120 24 180 0'/%3E%3C/g%3E%3C/svg%3E");
+        background-size: 240px 120px;
+    }
+}
