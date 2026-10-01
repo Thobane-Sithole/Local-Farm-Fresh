@@ -35,6 +35,13 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/shop', ShopController::class)->name('shop.index');
 Route::get('/products/{product:slug}', ProductPageController::class)->name('shop.show');
 Route::get('/farmers', [FarmerPageController::class, 'index'])->name('farmers.index');
+Route::middleware('guest')->group(function () {
+    Route::get('/farmers/join', [FarmerRegistrationController::class, 'create'])
+        ->name('farmer.register');
+    Route::post('/farmers/join', [FarmerRegistrationController::class, 'store'])
+        ->middleware('throttle:10,1')
+        ->name('farmer.register.store');
+});
 Route::get('/farmers/{farmerProfile:slug}', [FarmerPageController::class, 'show'])->name('farmers.show');
 
 // Phase 4 — cart (guests + auth)
@@ -48,19 +55,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store')->middleware('throttle:5,1');
     Route::get('/checkout/confirmed', [CheckoutController::class, 'confirmed'])->name('checkout.confirmed');
-});
-
-/*
-|--------------------------------------------------------------------------
-| Farmer registration (customers use Breeze's /register)
-|--------------------------------------------------------------------------
-*/
-Route::middleware('guest')->group(function () {
-    Route::get('/farmers/join', [FarmerRegistrationController::class, 'create'])
-        ->name('farmer.register');
-    Route::post('/farmers/join', [FarmerRegistrationController::class, 'store'])
-        ->middleware('throttle:10,1')
-        ->name('farmer.register.store');
 });
 
 /*
