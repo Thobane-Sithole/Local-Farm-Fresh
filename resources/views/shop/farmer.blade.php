@@ -30,6 +30,10 @@
             <div class="shrink-0 text-right">
                 <p class="text-3xl font-extrabold">{{ $products->count() }}</p>
                 <p class="text-sm text-brand-200">{{ Str::plural('product', $products->count()) }}</p>
+                @if ($reviewCount > 0)
+                    <p class="mt-3 text-amber-400 font-bold">★ {{ number_format($avgRating, 1) }}</p>
+                    <p class="text-xs text-brand-200">{{ $reviewCount }} {{ Str::plural('review', $reviewCount) }}</p>
+                @endif
             </div>
         </div>
 
@@ -72,6 +76,36 @@
                 </ul>
             @endif
         </div>
+
+        {{-- Reviews --}}
+        @if ($reviews->isNotEmpty())
+            <div class="mt-10">
+                <h2 class="text-xl font-bold text-ink mb-1">Customer reviews</h2>
+                <p class="text-sm text-muted mb-4">
+                    ★ {{ number_format($avgRating, 1) }} average from {{ $reviewCount }} {{ Str::plural('review', $reviewCount) }}
+                </p>
+                <div class="space-y-4">
+                    @foreach ($reviews as $review)
+                        <div class="rounded-card bg-white p-5 ring-1 ring-line/60">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="flex">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <svg class="h-4 w-4 {{ $i <= $review->rating ? 'text-amber-400' : 'text-stone-200' }}" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                                        </svg>
+                                    @endfor
+                                </div>
+                                <span class="text-sm font-semibold text-ink">{{ $review->customer->name }}</span>
+                                <span class="text-xs text-muted">{{ $review->created_at->format('j M Y') }}</span>
+                            </div>
+                            @if ($review->body)
+                                <p class="text-sm text-muted">{{ $review->body }}</p>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
 
         {{-- Delivery info --}}
         <div class="mt-10 rounded-card bg-brand-50 p-5 ring-1 ring-brand-100">

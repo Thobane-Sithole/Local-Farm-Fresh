@@ -18,7 +18,7 @@ class OrderPlacedCustomer extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database', 'mail', 'sms'];
     }
 
     public function toDatabase(object $notifiable): array
@@ -58,5 +58,15 @@ class OrderPlacedCustomer extends Notification implements ShouldQueue
              ->line("We'll keep you updated as the farmer prepares your order.");
 
         return $mail;
+    }
+
+    public function toSms(object $notifiable): string
+    {
+        $first = $this->orders->first();
+        $total = $this->orders->sum(fn ($o) => (float) $o->total);
+
+        return "Local-Farm-Fresh: Order {$first->order_number} placed — R"
+            . number_format($total, 2) . ' total. Cash on delivery. '
+            . url(route('account.orders.show', $first->order_number));
     }
 }

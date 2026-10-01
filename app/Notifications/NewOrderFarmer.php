@@ -16,7 +16,7 @@ class NewOrderFarmer extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database', 'mail', 'sms'];
     }
 
     public function toDatabase(object $notifiable): array
@@ -51,5 +51,13 @@ class NewOrderFarmer extends Notification implements ShouldQueue
              ->line('Please confirm or contact the customer if you cannot fulfil this order.');
 
         return $mail;
+    }
+
+    public function toSms(object $notifiable): string
+    {
+        $order = $this->order;
+        return "Local-Farm-Fresh: New order {$order->order_number} from {$order->customer->name} — R"
+            . number_format((float) $order->total, 2) . '. '
+            . url(route('farmer.orders.show', $order->order_number));
     }
 }

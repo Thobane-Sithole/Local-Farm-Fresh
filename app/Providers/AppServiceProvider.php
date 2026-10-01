@@ -7,7 +7,9 @@ use App\Events\OrderStatusAdvanced;
 use App\Listeners\SendOrderPlacedNotifications;
 use App\Listeners\SendOrderStatusNotifications;
 use App\Models\User;
+use App\Notifications\Channels\SmsChannel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\ChannelManager;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\URL;
@@ -42,5 +44,8 @@ class AppServiceProvider extends ServiceProvider
 
         Event::listen(OrderPlaced::class, SendOrderPlacedNotifications::class);
         Event::listen(OrderStatusAdvanced::class, SendOrderStatusNotifications::class);
+
+        // Register custom SMS channel
+        $this->app->make(ChannelManager::class)->extend('sms', fn ($app) => $app->make(SmsChannel::class));
     }
 }

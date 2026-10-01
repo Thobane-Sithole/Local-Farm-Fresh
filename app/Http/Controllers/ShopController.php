@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class ShopController extends Controller
@@ -31,9 +32,19 @@ class ShopController extends Controller
         }
 
         if ($request->filled('q')) {
-            $search = '%'.$request->q.'%';
-            $query->where(fn ($q) => $q->where('name', 'like', $search)
-                ->orWhere('short_description', 'like', $search));
+            $term = $request->q;
+            if (DB::getDriverName() === 'pgsql') {
+                // Full-text similarity search via pg_trgm — finds "tomatoes" even with typos
+                $query->where(fn ($q) => $q
+                    ->whereRaw('name % ?', [$term])
+                    ->orWhereRaw('name ILIKE ?', ["%{$term}%"])
+                    ->orWhereRaw('short_description ILIKE ?', ["%{$term}%"])
+                );
+            } else {
+                $search = '%'.$term.'%';
+                $query->where(fn ($q) => $q->where('name', 'like', $search)
+                    ->orWhere('short_description', 'like', $search));
+            }
         }
 
         $products = $query->paginate(24)->withQueryString();

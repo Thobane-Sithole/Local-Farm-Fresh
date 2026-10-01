@@ -28,6 +28,15 @@ class FarmerPageController extends Controller
             ->latest()
             ->get();
 
-        return view('shop.farmer', compact('farmerProfile', 'products'));
+        $reviews = $farmerProfile->reviews()
+            ->with('customer')
+            ->latest()
+            ->limit(10)
+            ->get();
+
+        $avgRating  = $farmerProfile->averageRating();
+        $reviewCount = $farmerProfile->reviews()->count();
+
+        return view('shop.farmer', compact('farmerProfile', 'products', 'reviews', 'avgRating', 'reviewCount'));
     }
 }

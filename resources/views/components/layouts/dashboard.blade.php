@@ -10,7 +10,8 @@
         'user' => 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0',
         'users' => 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-6 10a6 6 0 0 1 12 0m2-10a3 3 0 1 0 0-6m1 16h3a5 5 0 0 0-4-5',
         'tag' => 'M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9-9-9Zm5-5h.01',
-        'cog' => 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7.4-3a7.4 7.4 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7.5 7.5 0 0 0-2-1.2L14.5 3h-5l-.4 2.6a7.5 7.5 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7.5 7.5 0 0 0 2 1.2l.4 2.6h5l.4-2.6a7.5 7.5 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z',
+        'cog'   => 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7.4-3a7.4 7.4 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7.5 7.5 0 0 0-2-1.2L14.5 3h-5l-.4 2.6a7.5 7.5 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7.5 7.5 0 0 0 2 1.2l.4 2.6h5l.4-2.6a7.5 7.5 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z',
+        'chart' => 'M3 3v18h18M7 16l4-4 4 4 4-4',
     ];
 
     $nav = [
@@ -19,6 +20,7 @@
             ['Products', 'farmer.products.index', 'box'],
             ['Add product', 'farmer.products.create', 'plus'],
             ['Orders', 'farmer.orders.index', 'receipt'],
+            ['Analytics', 'farmer.analytics', 'chart'],
             ['Notifications', 'notifications.index', 'bell'],
             ['Farm profile', 'farmer.profile.edit', 'user'],
             ['Settings', 'profile.edit', 'cog'],
@@ -116,5 +118,6 @@
             {{ $slot }}
         </main>
     </div>
+    @stack('scripts')
 </body>
 </html>

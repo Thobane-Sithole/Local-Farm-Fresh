@@ -63,6 +63,16 @@ class Order extends Model
         return $this->hasMany(OrderStatusEvent::class)->orderBy('created_at');
     }
 
+    public function review(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Review::class);
+    }
+
+    public function isReviewable(): bool
+    {
+        return $this->status === OrderStatus::Delivered && $this->review === null;
+    }
+
     public function scopeForFarmer(Builder $query, FarmerProfile $farmer): Builder
     {
         return $query->where('farmer_profile_id', $farmer->id);

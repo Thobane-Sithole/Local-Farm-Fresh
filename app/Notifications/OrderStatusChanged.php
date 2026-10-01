@@ -20,7 +20,7 @@ class OrderStatusChanged extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database', 'mail', 'sms'];
     }
 
     public function toDatabase(object $notifiable): array
@@ -56,5 +56,14 @@ class OrderStatusChanged extends Notification implements ShouldQueue
             ->line("Status: **{$status}**")
             ->line($body)
             ->action('Track your order', route('account.orders.show', $order->order_number));
+    }
+
+    public function toSms(object $notifiable): string
+    {
+        $order  = $this->order;
+        $status = $this->newStatus->label();
+
+        return "Local-Farm-Fresh: Order {$order->order_number} is now {$status}. "
+            . url(route('account.orders.show', $order->order_number));
     }
 }

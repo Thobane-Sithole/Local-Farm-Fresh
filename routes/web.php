@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Account\OrderController as AccountOrderController;
+use App\Http\Controllers\Account\ReviewController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardRedirectController;
 use App\Http\Controllers\FarmerPageController;
+use App\Http\Controllers\Farmer\AnalyticsController as FarmerAnalyticsController;
 use App\Http\Controllers\Farmer\DashboardController as FarmerDashboardController;
 use App\Http\Controllers\Farmer\FarmProfileController;
 use App\Http\Controllers\Farmer\OrderController as FarmerOrderController;
@@ -79,6 +81,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/', AccountController::class)->name('index');
         Route::get('/orders', [AccountOrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order:order_number}', [AccountOrderController::class, 'show'])->name('orders.show');
+        Route::get('/orders/{order:order_number}/review', [ReviewController::class, 'create'])->name('orders.review');
+        Route::post('/orders/{order:order_number}/review', [ReviewController::class, 'store'])->name('orders.review.store');
     });
 
     // Farmer
@@ -90,6 +94,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders', [FarmerOrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order:order_number}', [FarmerOrderController::class, 'show'])->name('orders.show');
         Route::patch('/orders/{order:order_number}/status', [FarmerOrderController::class, 'updateStatus'])->name('orders.status');
+        Route::get('/analytics', FarmerAnalyticsController::class)->name('analytics');
     });
 
     // Admin
