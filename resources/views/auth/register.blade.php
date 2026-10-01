@@ -11,8 +11,8 @@
         <x-ui.input name="email" type="email" label="Email address" required autocomplete="email" inputmode="email" />
         <x-ui.input name="phone" type="tel" label="Phone number" autocomplete="tel" inputmode="tel"
                     placeholder="072 123 4567" hint="Farmers call this number if they need directions for delivery." />
-        <x-ui.input name="password" type="password" label="Password" required autocomplete="new-password" hint="At least 8 characters." />
-        <x-ui.input name="password_confirmation" type="password" label="Confirm password" required autocomplete="new-password" />
+        <x-ui.input name="password" type="password" label="Password" :toggleable="true" required autocomplete="new-password" hint="At least 8 characters." />
+        <x-ui.input name="password_confirmation" type="password" label="Confirm password" :toggleable="true" required autocomplete="new-password" />
 
         <x-ui.button class="w-full" size="lg">Create account</x-ui.button>
     </form>

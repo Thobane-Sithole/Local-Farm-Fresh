@@ -32,8 +32,8 @@
                         placeholder="072 123 4567" hint="Customers and our team will use this to reach you about orders." />
             <x-ui.input name="email" type="email" label="Email address" required autocomplete="email" inputmode="email"
                         hint="New orders are also sent here." />
-            <x-ui.input name="password" type="password" label="Password" required autocomplete="new-password" hint="At least 8 characters." />
-            <x-ui.input name="password_confirmation" type="password" label="Confirm password" required autocomplete="new-password" />
+            <x-ui.input name="password" type="password" label="Password" :toggleable="true" required autocomplete="new-password" hint="At least 8 characters." />
+            <x-ui.input name="password_confirmation" type="password" label="Confirm password" :toggleable="true" required autocomplete="new-password" />
         </fieldset>
 
         <fieldset class="space-y-5 border-t border-line pt-8">

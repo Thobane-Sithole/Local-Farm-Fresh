@@ -10,7 +10,7 @@
         @csrf
 
         <x-ui.input name="email" type="email" label="Email address" required autofocus autocomplete="username" inputmode="email" />
-        <x-ui.input name="password" type="password" label="Password" required autocomplete="current-password" />
+        <x-ui.input name="password" type="password" label="Password" :toggleable="true" required autocomplete="current-password" />
 
         <div class="flex items-center justify-between gap-4">
             <label for="remember" class="inline-flex min-h-[44px] items-center gap-2 text-sm text-ink">
