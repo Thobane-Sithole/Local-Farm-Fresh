@@ -4,6 +4,9 @@ set -e
 echo "Running migrations..."
 php artisan migrate --force
 
+echo "Seeding admin user..."
+php artisan db:seed --class=AdminSeeder --force
+
 echo "Caching config, routes and views..."
 php artisan config:cache
 php artisan route:cache

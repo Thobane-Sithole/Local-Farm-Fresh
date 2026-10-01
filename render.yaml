@@ -47,6 +47,12 @@ services:
         value: stderr
       - key: MAIL_MAILER
         value: log
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_NAME
+        sync: false
       - key: CLOUDINARY_URL
         sync: false
 
