@@ -47,8 +47,9 @@ class ProductController extends Controller
 
         $product = $this->products->create(
             $request->user()->farmerProfile,
-            $request->safe()->except('image'),
-            $request->file('image'),
+            $request->safe()->except(['image_url', 'image_public_id']),
+            $request->input('image_url'),
+            $request->input('image_public_id'),
         );
 
         return redirect()
@@ -73,8 +74,9 @@ class ProductController extends Controller
 
         $this->products->update(
             $product,
-            $request->safe()->except('image'),
-            $request->file('image'),
+            $request->safe()->except(['image_url', 'image_public_id']),
+            $request->input('image_url'),
+            $request->input('image_public_id'),
         );
 
         return redirect()

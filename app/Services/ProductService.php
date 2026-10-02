@@ -4,38 +4,37 @@ namespace App\Services;
 
 use App\Models\FarmerProfile;
 use App\Models\Product;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 
 class ProductService
 {
     public function __construct(private readonly CloudinaryService $cloudinary) {}
 
-    public function create(FarmerProfile $farmer, array $data, ?UploadedFile $image): Product
+    public function create(FarmerProfile $farmer, array $data, ?string $imageUrl, ?string $imagePublicId): Product
     {
-        return DB::transaction(function () use ($farmer, $data, $image) {
+        return DB::transaction(function () use ($farmer, $data, $imageUrl, $imagePublicId) {
             $product = $farmer->products()->create($data);
 
-            if ($image) {
-                $this->attachPrimaryImage($product, $image);
+            if ($imageUrl) {
+                $this->attachPreUploadedImage($product, $imageUrl, $imagePublicId);
             }
 
             return $product;
         });
     }
 
-    public function update(Product $product, array $data, ?UploadedFile $image): Product
+    public function update(Product $product, array $data, ?string $imageUrl, ?string $imagePublicId): Product
     {
-        return DB::transaction(function () use ($product, $data, $image) {
+        return DB::transaction(function () use ($product, $data, $imageUrl, $imagePublicId) {
             $product->update($data);
 
-            if ($image) {
+            if ($imageUrl) {
                 $old = $product->primaryImage;
                 if ($old?->public_id) {
                     $this->cloudinary->delete($old->public_id);
                 }
                 $product->images()->where('is_primary', true)->delete();
-                $this->attachPrimaryImage($product, $image);
+                $this->attachPreUploadedImage($product, $imageUrl, $imagePublicId);
             }
 
             return $product->fresh(['primaryImage']);
@@ -55,18 +54,12 @@ class ProductService
         });
     }
 
-    private function attachPrimaryImage(Product $product, UploadedFile $file): void
+    private function attachPreUploadedImage(Product $product, string $url, ?string $publicId): void
     {
-        $uploaded = $this->cloudinary->uploadProductImage($file);
-
-        if ($uploaded === null) {
-            return;
-        }
-
         $product->images()->create([
-            'url' => $uploaded['url'],
-            'public_id' => $uploaded['public_id'],
-            'alt_text' => $product->name,
+            'url'        => $url,
+            'public_id'  => $publicId,
+            'alt_text'   => $product->name,
             'is_primary' => true,
             'sort_order' => 0,
         ]);

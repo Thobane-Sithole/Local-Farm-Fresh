@@ -50,6 +50,12 @@
     <x-layouts.head :title="$title" :noindex="true" />
 </head>
 <body x-data="{ drawer: false }" class="min-h-screen">
+    {{-- Loading bar --}}
+    <div id="progress-bar" aria-hidden="true" style="position:fixed;top:0;left:0;height:3px;width:0;background:#2E9B50;z-index:9999;transition:width 300ms ease,opacity 400ms ease;pointer-events:none"></div>
+    <script>
+    (function(){var el=document.getElementById('progress-bar'),t1,t2;function start(){clearTimeout(t1);clearTimeout(t2);el.style.opacity='1';el.style.width='20%';t1=setTimeout(function(){el.style.width='60%';},250);t2=setTimeout(function(){el.style.width='82%';},700);}function done(){clearTimeout(t1);clearTimeout(t2);el.style.width='100%';setTimeout(function(){el.style.opacity='0';setTimeout(function(){el.style.width='0';},400);},200);}document.addEventListener('click',function(e){var a=e.target.closest('a[href]');if(a&&a.href&&a.target!=='_blank'&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!a.href.startsWith('#')&&!a.href.startsWith('javascript')){start();}});document.addEventListener('submit',start);window.addEventListener('pageshow',done);})();
+    </script>
+
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2">Skip to content</a>
 
     {{-- Mobile top bar --}}
@@ -105,7 +111,15 @@
         <div class="border-t border-white/10 p-4">
             <p class="truncate text-sm font-semibold text-white">{{ auth()->user()->name }}</p>
             <p class="truncate text-xs text-brand-100/80">{{ auth()->user()->email }}</p>
-            <form method="POST" action="{{ route('logout') }}" class="mt-3">
+            {{-- Dark mode toggle --}}
+            <button x-data @click="$store.darkMode.toggle()"
+                    class="mt-3 flex min-h-[44px] w-full items-center gap-3 rounded-xl px-3 text-sm font-semibold ring-1 ring-inset ring-white/20 hover:bg-white/5"
+                    :aria-label="$store.darkMode.on ? 'Switch to light mode' : 'Switch to dark mode'">
+                <svg x-show="!$store.darkMode.on" class="h-4 w-4 shrink-0 text-brand-100/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                <svg x-show="$store.darkMode.on" x-cloak class="h-4 w-4 shrink-0 text-brand-100/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 1 0 0 10A5 5 0 0 0 12 7z"/></svg>
+                <span x-text="$store.darkMode.on ? 'Light mode' : 'Dark mode'"></span>
+            </button>
+            <form method="POST" action="{{ route('logout') }}" class="mt-2">
                 @csrf
                 <button type="submit" class="flex min-h-[44px] w-full items-center justify-center rounded-xl text-sm font-semibold ring-1 ring-inset ring-white/20 hover:bg-white/5">Log out</button>
             </form>

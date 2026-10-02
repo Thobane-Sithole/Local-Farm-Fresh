@@ -9,6 +9,7 @@ import forms from '@tailwindcss/forms';
  * 4.84:1). brand-500 is for icons, accents, focus rings and large display type.
  */
 export default {
+    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
@@ -32,10 +33,10 @@ export default {
                     800: '#174C32',  // dark agricultural green
                     900: '#0F3D27',  // deep green
                 },
-                ink: '#18352A',
-                muted: '#68766D',
-                line: '#DCE7DF',
-                canvas: '#F8FAF7',
+                ink: 'rgb(var(--ink) / <alpha-value>)',
+                muted: 'rgb(var(--muted) / <alpha-value>)',
+                line: 'rgb(var(--line) / <alpha-value>)',
+                canvas: 'rgb(var(--canvas) / <alpha-value>)',
             },
             borderRadius: {
                 card: '1.25rem',

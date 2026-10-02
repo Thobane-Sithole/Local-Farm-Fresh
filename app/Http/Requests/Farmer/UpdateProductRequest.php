@@ -29,8 +29,9 @@ class UpdateProductRequest extends FormRequest
             'price' => ['required', 'numeric', 'min:0.01', 'max:99999.99'],
             'unit' => ['required', new Enum(ProductUnit::class)],
             'quantity_available' => ['required', 'integer', 'min:0', 'max:99999'],
-            'is_available' => ['boolean'],
-            'image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,webp'],
+            'is_available'      => ['boolean'],
+            'image_url'         => ['nullable', 'url', 'max:500'],
+            'image_public_id'   => ['nullable', 'string', 'max:200'],
         ];
     }
 

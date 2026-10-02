@@ -3,19 +3,31 @@
 @tailwind utilities;
 
 @layer base {
+    :root {
+        --ink: 24 53 42;
+        --muted: 104 118 109;
+        --line: 220 231 223;
+        --canvas: 248 250 247;
+    }
+
+    html.dark {
+        --ink: 228 238 231;
+        --muted: 154 176 160;
+        --line: 38 58 46;
+        --canvas: 15 26 19;
+    }
+
     html {
         -webkit-tap-highlight-color: transparent;
     }
 
     body {
-        /* Direct values — @apply with custom colors is unreliable in JIT if the class isn't in blade files */
-        background-color: #F8FAF7;
-        color: #18352A;
+        background-color: rgb(var(--canvas));
+        color: rgb(var(--ink));
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
     }
 
-    /* One consistent, clearly visible keyboard focus style everywhere. */
     :focus-visible {
         @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white;
     }
@@ -30,6 +42,23 @@
             transition-duration: 0.01ms !important;
         }
     }
+}
+
+/* Dark mode surface overrides — replaces hardcoded bg-white on cards and headers */
+html.dark .bg-white {
+    background-color: rgb(26 40 31) !important;
+}
+html.dark .bg-white\/95 {
+    background-color: rgb(26 40 31 / 0.95) !important;
+}
+
+/* Dark mode form controls */
+html.dark input:not([type=checkbox]):not([type=radio]):not([type=range]),
+html.dark textarea,
+html.dark select {
+    background-color: rgb(20 32 24) !important;
+    color: rgb(var(--ink)) !important;
+    border-color: rgb(var(--line)) !important;
 }
 
 @layer components {

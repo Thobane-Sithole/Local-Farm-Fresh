@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\CloudinarySignatureController;
 use App\Http\Controllers\Account\AccountController;
 use App\Http\Controllers\Account\OrderController as AccountOrderController;
 use App\Http\Controllers\Account\ReviewController;
@@ -32,6 +33,9 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', HomeController::class)->name('home');
+
+// Cloudinary browser-direct upload signature (auth required)
+Route::middleware('auth')->get('/api/cloudinary/sign', CloudinarySignatureController::class)->name('api.cloudinary.sign');
 
 // Phase 3 — marketplace
 Route::get('/shop', ShopController::class)->name('shop.index');
