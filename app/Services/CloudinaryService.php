@@ -9,7 +9,7 @@ class CloudinaryService
 {
     public function isConfigured(): bool
     {
-        return config('filesystems.disks.cloudinary') !== null;
+        return filled(env('CLOUDINARY_URL'));
     }
 
     public function uploadProductImage(UploadedFile $file): ?array
