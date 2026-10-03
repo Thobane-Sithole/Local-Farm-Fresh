@@ -61,6 +61,24 @@ html.dark select {
     border-color: rgb(var(--line)) !important;
 }
 
+/* Full-screen page loader animations */
+@keyframes loader-dot-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50%       { transform: scale(1.5); opacity: 0.45; }
+}
+@keyframes loader-ring {
+    from { stroke-dashoffset: 113; }
+    to   { stroke-dashoffset: 0; }
+}
+#loader-dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: loader-dot-pulse 1.4s ease-in-out infinite;
+}
+#page-loader.loader-active #loader-dot {
+    animation-play-state: running;
+}
+
 @layer components {
     /* Curved crop-row pattern used on deep-green brand panels. */
     .bg-furrows {

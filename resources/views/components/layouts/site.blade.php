@@ -17,10 +17,44 @@
     <x-layouts.head :title="$title" :description="$description" :og_image="$og_image" />
 </head>
 <body class="flex min-h-screen flex-col">
-    {{-- Loading bar --}}
-    <div id="progress-bar" aria-hidden="true" style="position:fixed;top:0;left:0;height:3px;width:0;background:#2E9B50;z-index:9999;transition:width 300ms ease,opacity 400ms ease;pointer-events:none"></div>
+    {{-- Full-screen page loader --}}
+    <div id="page-loader" role="status" aria-label="Loading"
+         style="position:fixed;inset:0;z-index:9998;background:#0F3D27;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;opacity:0;visibility:hidden;transition:opacity 180ms ease;pointer-events:none">
+        <svg id="loader-svg" width="88" height="88" viewBox="0 0 40 40" fill="none" aria-hidden="true"
+             style="transform:scale(0.55);transition:transform 480ms cubic-bezier(0.34,1.56,0.64,1)">
+            <rect width="40" height="40" rx="11" fill="white"/>
+            <path d="M10 30c0-11.6 8.4-20 20-20 0 11.6-8.4 20-20 20Z" fill="#23823F"/>
+            <path d="M10 30 23.5 16.5" stroke="white" stroke-width="2.4" stroke-linecap="round"/>
+            <circle id="loader-dot" cx="29" cy="29" r="3" fill="#E6F5E8"/>
+        </svg>
+        <p id="loader-wordmark" style="color:white;font-size:1.35rem;font-weight:800;letter-spacing:-0.03em;line-height:1;opacity:0;transform:translateY(12px);transition:opacity 300ms ease 280ms,transform 300ms ease 280ms">
+            Local-Farm-Fresh
+        </p>
+    </div>
     <script>
-    (function(){var el=document.getElementById('progress-bar'),t1,t2;function start(){clearTimeout(t1);clearTimeout(t2);el.style.opacity='1';el.style.width='20%';t1=setTimeout(function(){el.style.width='60%';},250);t2=setTimeout(function(){el.style.width='82%';},700);}function done(){clearTimeout(t1);clearTimeout(t2);el.style.width='100%';setTimeout(function(){el.style.opacity='0';setTimeout(function(){el.style.width='0';},400);},200);}document.addEventListener('click',function(e){var a=e.target.closest('a[href]');if(a&&a.href&&a.target!=='_blank'&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!a.href.startsWith('#')&&!a.href.startsWith('javascript')){start();}});document.addEventListener('submit',start);window.addEventListener('pageshow',done);})();
+    (function(){
+        var ld=document.getElementById('page-loader'),
+            ls=document.getElementById('loader-svg'),
+            lw=document.getElementById('loader-wordmark');
+        function show(){
+            ld.style.opacity='1';ld.style.visibility='visible';ld.style.pointerEvents='auto';ld.classList.add('loader-active');
+            requestAnimationFrame(function(){requestAnimationFrame(function(){
+                ls.style.transform='scale(1)';
+                lw.style.opacity='1';lw.style.transform='translateY(0)';
+            });});
+        }
+        function hide(){
+            ld.style.opacity='0';ld.style.visibility='hidden';ld.style.pointerEvents='none';ld.classList.remove('loader-active');
+            ls.style.transition='none';ls.style.transform='scale(0.55)';
+            lw.style.transition='none';lw.style.opacity='0';lw.style.transform='translateY(12px)';
+        }
+        document.addEventListener('click',function(e){
+            var a=e.target.closest('a[href]');
+            if(a&&a.href&&a.target!=='_blank'&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!a.href.startsWith('#')&&!a.href.startsWith('javascript:')){show();}
+        });
+        document.addEventListener('submit',show);
+        window.addEventListener('pageshow',hide);
+    })();
     </script>
 
     <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2">Skip to content</a>
