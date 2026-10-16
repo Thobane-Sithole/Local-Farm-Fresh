@@ -6,10 +6,10 @@
             src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1600&h=700&fit=crop&q=80&auto=format"
             alt=""
             aria-hidden="true"
-            class="absolute inset-0 h-full w-full object-cover"
+            class="absolute inset-0 h-full w-full object-cover opacity-30"
             fetchpriority="high"
         >
-        <div class="absolute inset-0 bg-gradient-to-r from-brand-950/95 via-brand-950/65 to-brand-950/10" aria-hidden="true"></div>
+        <div class="absolute inset-0 bg-brand-950/80" aria-hidden="true"></div>
 
         <div class="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="max-w-lg motion-hero">
