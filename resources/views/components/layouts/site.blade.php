@@ -37,6 +37,7 @@
             ls=document.getElementById('loader-svg'),
             lw=document.getElementById('loader-wordmark');
         function show(){
+            if(window.motionLoaderShow){window.motionLoaderShow();return;}
             ld.style.opacity='1';ld.style.visibility='visible';ld.style.pointerEvents='auto';ld.classList.add('loader-active');
             requestAnimationFrame(function(){requestAnimationFrame(function(){
                 ls.style.transform='scale(1)';
@@ -44,6 +45,7 @@
             });});
         }
         function hide(){
+            if(window.motionLoaderHide){window.motionLoaderHide();return;}
             ld.style.opacity='0';ld.style.visibility='hidden';ld.style.pointerEvents='none';ld.classList.remove('loader-active');
             ls.style.transition='none';ls.style.transform='scale(0.55)';
             lw.style.transition='none';lw.style.opacity='0';lw.style.transform='translateY(12px)';
