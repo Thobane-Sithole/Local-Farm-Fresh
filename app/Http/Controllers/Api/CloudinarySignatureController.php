@@ -9,20 +9,26 @@ class CloudinarySignatureController extends Controller
 {
     public function __invoke(): JsonResponse
     {
-        $url = env('CLOUDINARY_URL');
+        // Support both individual vars and the combined CLOUDINARY_URL
+        $apiKey    = env('CLOUDINARY_API_KEY');
+        $apiSecret = env('CLOUDINARY_API_SECRET');
+        $cloudName = env('CLOUDINARY_CLOUD_NAME');
 
-        if (! $url) {
-            return response()->json(['error' => 'Cloudinary not configured'], 503);
+        // Fall back to parsing CLOUDINARY_URL (format: cloudinary://key:secret@cloud)
+        if (! $apiKey || ! $apiSecret || ! $cloudName) {
+            $url = env('CLOUDINARY_URL');
+            if ($url) {
+                $parsed    = parse_url($url);
+                $apiKey    = $apiKey    ?: ($parsed['user'] ?? null);
+                $apiSecret = $apiSecret ?: urldecode($parsed['pass'] ?? '');
+                $cloudName = $cloudName ?: ($parsed['host'] ?? null);
+            }
         }
 
-        $parsed    = parse_url($url);
-        if (! is_array($parsed) || empty($parsed['user']) || empty($parsed['pass']) || empty($parsed['host'])) {
-            return response()->json(['error' => 'Cloudinary URL is misconfigured on the server'], 503);
+        if (! $apiKey || ! $apiSecret || ! $cloudName) {
+            return response()->json(['error' => 'Cloudinary credentials not found. Set CLOUDINARY_URL or CLOUDINARY_API_KEY / CLOUDINARY_API_SECRET / CLOUDINARY_CLOUD_NAME on the server.'], 503);
         }
 
-        $apiKey    = $parsed['user'];
-        $apiSecret = urldecode($parsed['pass']);
-        $cloudName = $parsed['host'];
         $folder    = 'local-farm-fresh/products';
         $timestamp = (int) now()->timestamp;
 
