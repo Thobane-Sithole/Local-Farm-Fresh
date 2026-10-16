@@ -9,30 +9,33 @@ class CloudinarySignatureController extends Controller
 {
     public function __invoke(): JsonResponse
     {
-        // Support both individual vars and the combined CLOUDINARY_URL
-        $apiKey    = env('CLOUDINARY_API_KEY');
-        $apiSecret = env('CLOUDINARY_API_SECRET');
-        $cloudName = env('CLOUDINARY_CLOUD_NAME');
+        // Use the Cloudinary SDK's own config reader — handles every URL format correctly
+        $cloudName = $apiKey = $apiSecret = null;
 
-        // Fall back to parsing CLOUDINARY_URL (format: cloudinary://key:secret@cloud)
-        if (! $apiKey || ! $apiSecret || ! $cloudName) {
-            $url = env('CLOUDINARY_URL');
-            if ($url) {
-                $parsed    = parse_url($url);
-                $apiKey    = $apiKey    ?: ($parsed['user'] ?? null);
-                $apiSecret = $apiSecret ?: urldecode($parsed['pass'] ?? '');
-                $cloudName = $cloudName ?: ($parsed['host'] ?? null);
-            }
+        try {
+            $cld       = new \Cloudinary\Cloudinary();
+            $cloudName = (string) $cld->configuration->cloud->cloudName;
+            $apiKey    = (string) $cld->configuration->cloud->apiKey;
+            $apiSecret = (string) $cld->configuration->cloud->apiSecret;
+        } catch (\Throwable) {
+            // SDK couldn't read config — fall through to individual env vars
         }
 
+        // Also accept individual env vars in case SDK config is empty
+        $apiKey    = ($apiKey    ?: env('CLOUDINARY_API_KEY'))    ?: null;
+        $apiSecret = ($apiSecret ?: env('CLOUDINARY_API_SECRET')) ?: null;
+        $cloudName = ($cloudName ?: env('CLOUDINARY_CLOUD_NAME')) ?: null;
+
         if (! $apiKey || ! $apiSecret || ! $cloudName) {
-            return response()->json(['error' => 'Cloudinary credentials not found. Set CLOUDINARY_URL or CLOUDINARY_API_KEY / CLOUDINARY_API_SECRET / CLOUDINARY_CLOUD_NAME on the server.'], 503);
+            return response()->json([
+                'error' => 'Cloudinary not configured. Add CLOUDINARY_URL (or CLOUDINARY_API_KEY + CLOUDINARY_API_SECRET + CLOUDINARY_CLOUD_NAME) to your Render environment variables.',
+            ], 503);
         }
 
         $folder    = 'local-farm-fresh/products';
         $timestamp = (int) now()->timestamp;
 
-        // Params must be alphabetically sorted, joined with &, then api_secret appended
+        // Params alphabetically sorted + api_secret appended (Cloudinary signed-upload spec)
         $toSign    = "folder={$folder}&timestamp={$timestamp}";
         $signature = sha1($toSign . $apiSecret);
 
