@@ -69,7 +69,7 @@
                         Try a different category or search term.
                     </x-ui.empty-state>
                 @else
-                    <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" role="list">
+                    <ul class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3" role="list" data-grid>
                         @foreach ($products as $product)
                             <li>
                                 <a href="{{ route('shop.show', $product) }}"

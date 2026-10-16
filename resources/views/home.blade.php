@@ -2,7 +2,7 @@
 <x-layouts.site>
     <section class="bg-furrows text-white">
         <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:items-center lg:px-8">
-            <div>
+            <div class="motion-hero">
                 <h1 class="text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
                     Fresh food from local farmers.
                 </h1>

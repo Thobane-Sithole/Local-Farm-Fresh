@@ -19,7 +19,7 @@
 
     <section aria-labelledby="stats-heading" class="mt-8">
         <h2 id="stats-heading" class="sr-only">Your numbers</h2>
-        <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
+        <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5" data-grid>
             <x-dashboard.stat-card label="Pending orders" :value="$stats['pending_orders']" :href="$ordersUrl" highlight class="col-span-2 lg:col-span-1" />
             <x-dashboard.stat-card label="Total products" :value="$stats['total_products']" />
             <x-dashboard.stat-card label="Active products" :value="$stats['active_products']" />
