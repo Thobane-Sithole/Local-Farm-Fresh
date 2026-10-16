@@ -17,7 +17,7 @@ class CloudinarySignatureController extends Controller
 
         $parsed    = parse_url($url);
         $apiKey    = $parsed['user'];
-        $apiSecret = $parsed['pass'];
+        $apiSecret = urldecode($parsed['pass']);
         $cloudName = $parsed['host'];
         $folder    = 'local-farm-fresh/products';
         $timestamp = (int) now()->timestamp;

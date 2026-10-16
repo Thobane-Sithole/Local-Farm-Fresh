@@ -12,8 +12,8 @@
 
     <div class="mt-4" x-data="{
         preview: {{ $existingUrl ? json_encode($existingUrl) : 'null' }},
-        imageUrl: {{ $existingUrl ? json_encode($existingUrl) : "''" }},
-        imagePublicId: {{ $existingPublicId ? json_encode($existingPublicId) : "''" }},
+        imageUrl: '',
+        imagePublicId: '',
         uploading: false,
         progress: 0,
         uploadError: null,
@@ -25,7 +25,9 @@
             this.progress = 0;
             this.preview = URL.createObjectURL(file);
             try {
-                const sig = await fetch('{{ route('api.cloudinary.sign') }}').then(r => r.json());
+                const sigRes = await fetch('{{ route('api.cloudinary.sign') }}', { credentials: 'same-origin' });
+                const sig = await sigRes.json();
+                if (!sigRes.ok || sig.error) throw new Error(sig.error || 'Could not get upload credentials');
                 const fd = new FormData();
                 fd.append('file', file);
                 fd.append('api_key', sig.api_key);
@@ -37,9 +39,15 @@
                     xhr.upload.addEventListener('progress', e => {
                         if (e.lengthComputable) this.progress = Math.round((e.loaded / e.total) * 100);
                     });
-                    xhr.onload = () => xhr.status === 200
-                        ? resolve(JSON.parse(xhr.responseText))
-                        : reject(new Error('Upload failed (' + xhr.status + ')'));
+                    xhr.onload = () => {
+                        if (xhr.status === 200) {
+                            resolve(JSON.parse(xhr.responseText));
+                        } else {
+                            let msg = 'Upload failed (' + xhr.status + ')';
+                            try { msg = JSON.parse(xhr.responseText).error?.message || msg; } catch {}
+                            reject(new Error(msg));
+                        }
+                    };
                     xhr.onerror = () => reject(new Error('Network error'));
                     xhr.open('POST', `https://api.cloudinary.com/v1_1/${sig.cloud_name}/image/upload`);
                     xhr.send(fd);
@@ -48,9 +56,10 @@
                 this.imagePublicId = result.public_id;
                 this.preview = result.secure_url;
             } catch (err) {
-                this.uploadError = 'Upload failed. Please try again.';
+                this.uploadError = err.message || 'Upload failed. Please try again.';
                 this.preview = {{ $existingUrl ? json_encode($existingUrl) : 'null' }};
-                this.imageUrl = {{ $existingUrl ? json_encode($existingUrl) : "''" }};
+                this.imageUrl = '';
+                this.imagePublicId = '';
             } finally {
                 this.uploading = false;
                 this.progress = 0;
