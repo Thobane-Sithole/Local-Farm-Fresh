@@ -25,7 +25,7 @@
             this.progress = 0;
             this.preview = URL.createObjectURL(file);
             try {
-                const sigRes = await fetch('{{ route('api.cloudinary.sign') }}', { credentials: 'same-origin' });
+                const sigRes = await fetch('{{ route('api.cloudinary.sign') }}', { credentials: 'same-origin', headers: { 'Accept': 'application/json' } });
                 let sig;
                 try { sig = await sigRes.json(); } catch { throw new Error('Upload service unavailable (' + sigRes.status + ') — check Cloudinary env var on server'); }
                 if (!sigRes.ok || sig.error) throw new Error(sig.error || 'Could not get upload credentials');
