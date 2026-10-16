@@ -17,7 +17,7 @@ class ProductPageController extends Controller
         $otherProducts = Product::visible()
             ->where('farmer_profile_id', $product->farmer_profile_id)
             ->where('id', '!=', $product->id)
-            ->with('primaryImage')
+            ->with(['primaryImage', 'category'])
             ->limit(4)
             ->get();
 

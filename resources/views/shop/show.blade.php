@@ -40,6 +40,12 @@
                             @endforeach
                         </div>
                     @endif
+                @elseif ($product->category)
+                    <div class="aspect-square overflow-hidden rounded-card">
+                        <img src="{{ $product->category->imageUrl(800, 800) }}"
+                             alt="{{ $product->category->name }}"
+                             class="h-full w-full object-cover opacity-75">
+                    </div>
                 @else
                     <div class="flex aspect-square items-center justify-center rounded-card bg-brand-50">
                         <svg class="h-20 w-20 text-brand-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75 7.5 9l4.5 6 3-4.5 4.5 6H2.25Z"/></svg>
@@ -133,6 +139,9 @@
                                     @if ($other->primaryImage)
                                         <img src="{{ $other->primaryImage->url }}" alt="{{ $other->name }}"
                                              class="h-full w-full object-cover transition-transform group-hover:scale-105">
+                                    @elseif ($other->category)
+                                        <img src="{{ $other->category->imageUrl(400, 300) }}" alt="{{ $other->category->name }}"
+                                             class="h-full w-full object-cover opacity-70 transition-transform group-hover:scale-105">
                                     @else
                                         <div class="flex h-full items-center justify-center">
                                             <svg class="h-8 w-8 text-brand-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75 7.5 9l4.5 6 3-4.5 4.5 6H2.25Z"/></svg>

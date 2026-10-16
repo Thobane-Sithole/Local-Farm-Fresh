@@ -30,29 +30,36 @@
         <div class="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start">
 
             {{-- Category sidebar --}}
-            <nav class="shrink-0 lg:w-52" aria-label="Categories">
+            <nav class="shrink-0 lg:w-56" aria-label="Categories">
                 <ul class="space-y-0.5 rounded-card bg-white p-2 shadow-card ring-1 ring-line/60">
                     <li>
                         <a href="{{ route('shop.index', request()->only('q')) }}"
                            @class([
-                               'flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors',
+                               'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors',
                                'bg-brand-600 text-white' => ! $currentCategory,
                                'text-ink hover:bg-brand-50' => $currentCategory,
                            ])>
-                            All produce
+                            <span class="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-brand-100 text-brand-600">
+                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>
+                            </span>
+                            <span class="flex-1">All produce</span>
                         </a>
                     </li>
                     @foreach ($categories as $cat)
                         <li>
                             <a href="{{ route('shop.index', array_merge(request()->only('q'), ['category' => $cat->slug])) }}"
                                @class([
-                                   'flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors',
+                                   'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors',
                                    'bg-brand-600 text-white' => $currentCategory?->id === $cat->id,
                                    'text-ink hover:bg-brand-50' => $currentCategory?->id !== $cat->id,
                                ])>
-                                {{ $cat->name }}
+                                <span class="h-7 w-7 shrink-0 overflow-hidden rounded-lg">
+                                    <img src="{{ $cat->imageUrl(56, 56) }}" alt="" aria-hidden="true" loading="lazy"
+                                         class="h-full w-full object-cover">
+                                </span>
+                                <span class="flex-1 truncate">{{ $cat->name }}</span>
                                 <span @class([
-                                    'text-xs',
+                                    'shrink-0 text-xs',
                                     'text-white/70' => $currentCategory?->id === $cat->id,
                                     'text-muted' => $currentCategory?->id !== $cat->id,
                                 ])>{{ $cat->products_count }}</span>
@@ -81,6 +88,11 @@
                                                  alt="{{ $product->primaryImage->alt_text ?: $product->name }}"
                                                  loading="lazy"
                                                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+                                        @elseif ($product->category)
+                                            <img src="{{ $product->category->imageUrl(400, 300) }}"
+                                                 alt="{{ $product->category->name }}"
+                                                 loading="lazy"
+                                                 class="h-full w-full object-cover opacity-70 transition-transform duration-300 group-hover:scale-105">
                                         @else
                                             <div class="flex h-full items-center justify-center">
                                                 <svg class="h-12 w-12 text-brand-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75 7.5 9l4.5 6 3-4.5 4.5 6H2.25Z"/></svg>

@@ -20,6 +20,7 @@
         'ghost' => 'text-brand-600 hover:bg-brand-50',
         'danger' => 'bg-red-700 text-white hover:bg-red-800',
         'inverse' => 'bg-white text-brand-900 hover:bg-brand-100',
+        'glass'   => 'bg-white/10 text-white ring-1 ring-inset ring-white/30 hover:bg-white/20',
     ];
 
     $classes = $base.' '.($sizes[$size] ?? $sizes['md']).' '.($variants[$variant] ?? $variants['primary']);
