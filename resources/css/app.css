@@ -45,38 +45,44 @@
 }
 
 /* ─── Dark mode overrides ─────────────────────────────────────────────────────
-   These cover hardcoded Tailwind color classes used in templates that predate
-   the semantic token system, so all 30+ templates work without edits.
+   Covers every hardcoded Tailwind colour class found across all 30+ templates.
    ──────────────────────────────────────────────────────────────────────────── */
 
-/* White surfaces */
+/* ── White / canvas surfaces ── */
 html.dark .bg-white       { background-color: rgb(26 40 31) !important; }
 html.dark .bg-white\/95   { background-color: rgb(26 40 31 / 0.95) !important; }
 
-/* Stone backgrounds */
+/* ── Stone backgrounds ── */
 html.dark .bg-stone-50    { background-color: rgb(20 30 24) !important; }
 html.dark .bg-stone-100   { background-color: rgb(24 36 28) !important; }
 html.dark .bg-stone-200   { background-color: rgb(32 48 38) !important; }
-html.dark .hover\:bg-stone-50:hover { background-color: rgb(20 30 24) !important; }
+html.dark .hover\:bg-stone-50:hover  { background-color: rgb(20 30 24) !important; }
+html.dark .hover\:bg-stone-100:hover { background-color: rgb(24 36 28) !important; }
 
-/* Gray backgrounds (auth / Breeze templates) */
+/* ── Gray backgrounds (auth / Breeze) ── */
 html.dark .bg-gray-50     { background-color: rgb(20 30 24) !important; }
 html.dark .bg-gray-100    { background-color: rgb(24 36 28) !important; }
 html.dark .bg-gray-200    { background-color: rgb(32 48 38) !important; }
-html.dark .hover\:bg-gray-50:hover { background-color: rgb(20 30 24) !important; }
+html.dark .hover\:bg-gray-50:hover   { background-color: rgb(20 30 24) !important; }
 
-/* Green tinted flash banners */
-html.dark .bg-green-50    { background-color: rgb(10 44 24) !important; }
-html.dark .text-green-700 { color: rgb(110 231 183) !important; }
-html.dark .border-green-200 { border-color: rgb(52 211 153 / 0.25) !important; }
+/* ── Brand tinted surfaces ── */
+html.dark .bg-brand-50    { background-color: rgb(12 24 16) !important; }
 html.dark .bg-brand-100   { background-color: rgb(18 42 28) !important; }
+html.dark .hover\:bg-brand-50:hover  { background-color: rgb(16 30 20) !important; }
 
-/* Red error states */
+/* ── Status badge backgrounds ── */
+html.dark .bg-green-50    { background-color: rgb(10 44 24) !important; }
+html.dark .bg-green-100   { background-color: rgb(10 38 22) !important; }
 html.dark .bg-red-50      { background-color: rgb(40 14 14) !important; }
-html.dark .text-red-900   { color: rgb(252 165 165) !important; }
-html.dark .ring-red-200   { --tw-ring-color: rgb(220 38 38 / 0.3) !important; }
+html.dark .bg-red-100     { background-color: rgb(48 16 16) !important; }
+html.dark .bg-amber-100   { background-color: rgb(42 30 8) !important; }
+html.dark .bg-blue-100    { background-color: rgb(12 22 44) !important; }
+html.dark .bg-indigo-100,
+html.dark .bg-indigo-50   { background-color: rgb(18 14 44) !important; }
+html.dark .bg-purple-100  { background-color: rgb(26 10 38) !important; }
+html.dark .bg-cyan-100    { background-color: rgb(8 28 34) !important; }
 
-/* Stone text — maps to semantic tokens */
+/* ── Stone text ── */
 html.dark .text-stone-800,
 html.dark .text-stone-700 { color: rgb(var(--ink)) !important; }
 html.dark .text-stone-600,
@@ -84,32 +90,58 @@ html.dark .text-stone-500 { color: rgb(var(--muted)) !important; }
 html.dark .text-stone-400,
 html.dark .text-stone-300 { color: rgb(var(--muted) / 0.65) !important; }
 
-/* Gray text (auth / Breeze templates) */
+/* ── Gray text (auth / Breeze) ── */
+html.dark .text-gray-900,
 html.dark .text-gray-800,
-html.dark .text-gray-700,
-html.dark .text-gray-900  { color: rgb(var(--ink)) !important; }
+html.dark .text-gray-700 { color: rgb(var(--ink)) !important; }
 html.dark .text-gray-600,
-html.dark .text-gray-500  { color: rgb(var(--muted)) !important; }
+html.dark .text-gray-500 { color: rgb(var(--muted)) !important; }
 html.dark .text-gray-400,
-html.dark .text-gray-300  { color: rgb(var(--muted) / 0.65) !important; }
+html.dark .text-gray-300 { color: rgb(var(--muted) / 0.65) !important; }
 
-/* Brand 800/900 headings — too dark on dark backgrounds */
+/* ── Brand text ── */
 html.dark .text-brand-900,
 html.dark .text-brand-800 { color: rgb(var(--ink)) !important; }
+html.dark .text-brand-700 { color: rgb(134 239 172) !important; } /* price labels — brightened */
+html.dark .text-brand-600 { color: rgb(110 231 183) !important; } /* links / accents — brightened */
 
-/* Stone / gray borders and dividers */
+/* ── Status badge text ── */
+html.dark .text-green-700,
+html.dark .text-green-600 { color: rgb(110 231 183) !important; }
+html.dark .text-red-900,
+html.dark .text-red-800,
+html.dark .text-red-700,
+html.dark .text-red-600,
+html.dark .text-red-500,
+html.dark .text-red-400   { color: rgb(252 165 165) !important; }
+html.dark .text-amber-700,
+html.dark .text-amber-400 { color: rgb(252 211 77) !important; }
+html.dark .text-blue-700,
+html.dark .text-blue-600  { color: rgb(147 197 253) !important; }
+html.dark .text-indigo-700,
+html.dark .text-indigo-800 { color: rgb(165 180 252) !important; }
+html.dark .text-purple-700,
+html.dark .text-purple-800 { color: rgb(196 181 253) !important; }
+html.dark .text-cyan-700  { color: rgb(103 232 249) !important; }
+
+/* ── Borders and dividers ── */
 html.dark .border-stone-100,
 html.dark .border-stone-200,
 html.dark .border-stone-300 { border-color: rgb(var(--line)) !important; }
 html.dark .border-gray-100,
 html.dark .border-gray-200,
 html.dark .border-gray-300  { border-color: rgb(var(--line)) !important; }
+html.dark .border-red-600,
+html.dark .border-red-300,
+html.dark .border-red-200   { border-color: rgb(220 38 38 / 0.5) !important; }
+html.dark .border-green-200 { border-color: rgb(52 211 153 / 0.25) !important; }
 html.dark .divide-stone-100 > * + *,
 html.dark .divide-stone-200 > * + *,
 html.dark .divide-gray-100  > * + *,
 html.dark .divide-gray-200  > * + * { border-color: rgb(var(--line)) !important; }
+html.dark .ring-red-200     { --tw-ring-color: rgb(220 38 38 / 0.3) !important; }
 
-/* Form controls */
+/* ── Form controls ── */
 html.dark input:not([type=checkbox]):not([type=radio]):not([type=range]),
 html.dark textarea,
 html.dark select {
@@ -117,8 +149,9 @@ html.dark select {
     color: rgb(var(--ink)) !important;
     border-color: rgb(var(--line)) !important;
 }
+html.dark ::placeholder { color: rgb(var(--muted) / 0.6) !important; }
 
-/* Full-screen page loader animations */
+/* ─── Full-screen page loader animations ──────────────────────────────────── */
 @keyframes loader-dot-pulse {
     0%, 100% { transform: scale(1); opacity: 1; }
     50%       { transform: scale(1.5); opacity: 0.45; }
