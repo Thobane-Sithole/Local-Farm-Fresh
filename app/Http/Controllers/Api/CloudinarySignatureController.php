@@ -16,6 +16,10 @@ class CloudinarySignatureController extends Controller
         }
 
         $parsed    = parse_url($url);
+        if (! is_array($parsed) || empty($parsed['user']) || empty($parsed['pass']) || empty($parsed['host'])) {
+            return response()->json(['error' => 'Cloudinary URL is misconfigured on the server'], 503);
+        }
+
         $apiKey    = $parsed['user'];
         $apiSecret = urldecode($parsed['pass']);
         $cloudName = $parsed['host'];

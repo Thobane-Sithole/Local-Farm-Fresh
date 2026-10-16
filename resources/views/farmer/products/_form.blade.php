@@ -26,7 +26,8 @@
             this.preview = URL.createObjectURL(file);
             try {
                 const sigRes = await fetch('{{ route('api.cloudinary.sign') }}', { credentials: 'same-origin' });
-                const sig = await sigRes.json();
+                let sig;
+                try { sig = await sigRes.json(); } catch { throw new Error('Upload service unavailable (' + sigRes.status + ') — check Cloudinary env var on server'); }
                 if (!sigRes.ok || sig.error) throw new Error(sig.error || 'Could not get upload credentials');
                 const fd = new FormData();
                 fd.append('file', file);
@@ -86,7 +87,7 @@
                 <input
                     type="file"
                     id="image"
-                    accept="image/jpeg,image/png,image/webp"
+                    accept="image/*"
                     class="sr-only"
                     :disabled="uploading"
                     @change="handleFile($event)"
@@ -103,7 +104,7 @@
                     <div class="h-full bg-brand-500 transition-all duration-200" :style="`width:${progress}%`"></div>
                 </div>
 
-                <p class="mt-1.5 text-xs text-muted">JPEG, PNG or WebP · Max 10 MB</p>
+                <p class="mt-1.5 text-xs text-muted">Any image format · Max 10 MB</p>
                 <p x-show="uploadError" x-cloak x-text="uploadError" class="mt-1.5 text-sm font-medium text-red-700"></p>
                 @error('image_url')
                     <p class="mt-1.5 text-sm font-medium text-red-700">{{ $message }}</p>
