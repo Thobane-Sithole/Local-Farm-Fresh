@@ -21,7 +21,7 @@ export default {
         extend: {
             fontFamily: {
                 sans:    ['DM Sans', ...defaultTheme.fontFamily.sans],
-                display: ['Fraunces', ...defaultTheme.fontFamily.serif],
+                display: ['Space Grotesk', ...defaultTheme.fontFamily.sans],
             },
             colors: {
                 brand: {

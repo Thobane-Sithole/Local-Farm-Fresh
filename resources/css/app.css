@@ -29,8 +29,7 @@
     }
 
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Fraunces', Georgia, serif;
-        font-optical-sizing: auto;
+        font-family: 'Space Grotesk', system-ui, sans-serif;
     }
 
     :focus-visible {
@@ -71,7 +70,8 @@ html.dark .bg-gray-200    { background-color: rgb(32 48 38) !important; }
 html.dark .hover\:bg-gray-50:hover   { background-color: rgb(20 30 24) !important; }
 
 /* ── Brand tinted surfaces ── */
-html.dark .bg-brand-50    { background-color: rgb(12 24 16) !important; }
+html.dark .bg-brand-50,
+html.dark .bg-brand-50\/50 { background-color: rgb(12 24 16) !important; }
 html.dark .bg-brand-100   { background-color: rgb(18 42 28) !important; }
 html.dark .hover\:bg-brand-50:hover  { background-color: rgb(16 30 20) !important; }
 

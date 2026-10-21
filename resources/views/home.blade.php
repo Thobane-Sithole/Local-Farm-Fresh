@@ -9,7 +9,7 @@
             class="absolute inset-0 h-full w-full object-cover opacity-30"
             fetchpriority="high"
         >
-        <div class="absolute inset-0 bg-brand-950/80" aria-hidden="true"></div>
+        <div class="absolute inset-0 bg-brand-900/80" aria-hidden="true"></div>
 
         <div class="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
             <div class="max-w-lg motion-hero">
