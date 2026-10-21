@@ -2,11 +2,15 @@
 
 namespace App\Services;
 
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\UploadedFile;
 
 class CloudinaryService
 {
+    private function sdk(): \Cloudinary\Cloudinary
+    {
+        return new \Cloudinary\Cloudinary();
+    }
+
     public function isConfigured(): bool
     {
         return filled(env('CLOUDINARY_URL'));
@@ -18,7 +22,7 @@ class CloudinaryService
             return null;
         }
 
-        $result = Cloudinary::uploadApi()->upload($file->getRealPath(), [
+        $result = $this->sdk()->uploadApi()->upload($file->getRealPath(), [
             'folder' => 'local-farm-fresh/products',
             'transformation' => [
                 ['width' => 1200, 'height' => 900, 'crop' => 'limit'],
@@ -38,7 +42,7 @@ class CloudinaryService
             return null;
         }
 
-        $result = Cloudinary::uploadApi()->upload($file->getRealPath(), [
+        $result = $this->sdk()->uploadApi()->upload($file->getRealPath(), [
             'folder' => 'local-farm-fresh/farm-profiles',
             'transformation' => [
                 ['width' => 800, 'height' => 800, 'crop' => 'fill', 'gravity' => 'face'],
@@ -58,6 +62,10 @@ class CloudinaryService
             return;
         }
 
-        Cloudinary::uploadApi()->destroy($publicId);
+        try {
+            $this->sdk()->uploadApi()->destroy($publicId);
+        } catch (\Throwable) {
+            // Do not let a Cloudinary API failure block database operations.
+        }
     }
 }
