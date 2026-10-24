@@ -13,11 +13,11 @@ class FarmerController extends Controller
     {
         // Verified farmers sorted by days remaining (lowest first = most urgent),
         // then unverified farmers below.
+        // Uses PostgreSQL-compatible boolean ordering (no integer comparison on bool column).
         $farmers = FarmerProfile::with('user')
             ->withCount(['products', 'orders'])
-            ->orderByRaw('CASE WHEN is_verified = 1 THEN 0 ELSE 1 END ASC')
-            ->orderByRaw('CASE WHEN verified_at IS NULL THEN 1 ELSE 0 END ASC')
-            ->orderBy('verified_at', 'asc')
+            ->orderBy('is_verified', 'desc')            // true before false
+            ->orderByRaw('verified_at ASC NULLS LAST')  // oldest period first; NULLs at bottom
             ->paginate(20);
 
         $expiredCount = FarmerProfile::where('is_verified', true)
