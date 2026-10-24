@@ -70,4 +70,20 @@ class UserController extends Controller
 
         return back()->with('status', "{$user->name} has been reinstated.");
     }
+
+    public function destroy(User $user): RedirectResponse
+    {
+        if (! $user->isSuspended()) {
+            return back()->with('error', 'Only suspended accounts can be deleted.');
+        }
+
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'You cannot delete your own account.');
+        }
+
+        $name = $user->name;
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('status', "Account \"{$name}\" has been permanently deleted.");
+    }
 }

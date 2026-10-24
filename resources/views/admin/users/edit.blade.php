@@ -94,6 +94,12 @@
                                 @csrf
                                 <x-ui.button type="submit" class="w-full">Reinstate account</x-ui.button>
                             </form>
+                            <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="mt-3"
+                                  onsubmit="return confirm('Permanently delete {{ addslashes($user->name) }}? This cannot be undone.')">
+                                @csrf
+                                @method('DELETE')
+                                <x-ui.button type="submit" variant="danger" class="w-full">Delete account</x-ui.button>
+                            </form>
                         @else
                             <form x-data="{ open: false }" method="POST" action="{{ route('admin.users.suspend', $user) }}">
                                 @csrf

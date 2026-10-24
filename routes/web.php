@@ -107,7 +107,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('categories', CategoryController::class)->except(['show']);
 
         // User management
-        Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update']);
+        Route::resource('users', AdminUserController::class)->only(['index', 'edit', 'update', 'destroy']);
         Route::post('users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
         Route::post('users/{user}/reinstate', [AdminUserController::class, 'reinstate'])->name('users.reinstate');
 
