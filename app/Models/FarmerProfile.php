@@ -27,12 +27,36 @@ class FarmerProfile extends Model
     protected function casts(): array
     {
         return [
-            'province' => Province::class,
+            'province'    => Province::class,
             'delivery_fee' => 'decimal:2',
-            'latitude' => 'decimal:7',
-            'longitude' => 'decimal:7',
+            'latitude'    => 'decimal:7',
+            'longitude'   => 'decimal:7',
             'is_verified' => 'boolean',
+            'verified_at' => 'datetime',
         ];
+    }
+
+    public const VERIFICATION_DAYS = 30;
+
+    /** Days remaining in the current verification period. Null if no period started. */
+    public function daysRemaining(): ?int
+    {
+        if (! $this->verified_at) {
+            return null;
+        }
+
+        $days = (int) now()->diffInDays($this->verified_at->copy()->addDays(self::VERIFICATION_DAYS), false);
+
+        return max($days, 0);
+    }
+
+    public function isExpired(): bool
+    {
+        if (! $this->verified_at) {
+            return false;
+        }
+
+        return $this->verified_at->copy()->addDays(self::VERIFICATION_DAYS)->isPast();
     }
 
     protected function slugSource(): string
@@ -73,9 +97,15 @@ class FarmerProfile extends Model
             ->implode(', ');
     }
 
-    /** Farmers whose account is active — suspended farmers disappear from the marketplace. */
+    /** Farmers whose account is active and verification has not expired. */
     public function scopeListed(Builder $query): Builder
     {
-        return $query->whereHas('user', fn (Builder $q) => $q->active());
+        return $query
+            ->whereHas('user', fn (Builder $q) => $q->active())
+            ->where('is_verified', true)
+            ->where(fn (Builder $q) => $q
+                ->whereNull('verified_at') // pre-feature farmers: no expiry
+                ->orWhere('verified_at', '>=', now()->subDays(self::VERIFICATION_DAYS))
+            );
     }
 }

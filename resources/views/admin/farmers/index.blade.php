@@ -2,7 +2,7 @@
     <div class="max-w-6xl mx-auto">
         <div class="flex items-center justify-between mb-6">
             <h1 class="text-xl font-bold text-brand-900">Farmers</h1>
-            <div class="flex items-center gap-2 text-sm">
+            <div class="flex items-center gap-2 text-sm flex-wrap">
                 <span class="bg-stone-100 text-stone-600 font-semibold px-2.5 py-0.5 rounded-full">
                     {{ $counts['total'] }} total
                 </span>
@@ -12,6 +12,11 @@
                 @if ($counts['unverified'] > 0)
                     <span class="bg-amber-100 text-amber-700 font-semibold px-2.5 py-0.5 rounded-full">
                         {{ $counts['unverified'] }} pending
+                    </span>
+                @endif
+                @if ($counts['expired'] > 0)
+                    <span class="bg-red-100 text-red-700 font-semibold px-2.5 py-0.5 rounded-full">
+                        {{ $counts['expired'] }} expired
                     </span>
                 @endif
             </div>
@@ -37,13 +42,18 @@
                             <th class="text-left px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide hidden md:table-cell">Location</th>
                             <th class="text-center px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Products</th>
                             <th class="text-center px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Orders</th>
-                            <th class="text-center px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Verified</th>
+                            <th class="text-center px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Status</th>
+                            <th class="text-center px-4 py-3 text-xs font-semibold text-stone-500 uppercase tracking-wide">Days Left</th>
                             <th class="px-4 py-3"></th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-stone-100">
                         @foreach ($farmers as $farmer)
-                            <tr class="hover:bg-stone-50/50 transition">
+                            @php
+                                $days    = $farmer->daysRemaining();
+                                $expired = $farmer->isExpired();
+                            @endphp
+                            <tr class="hover:bg-stone-50/50 transition {{ $expired ? 'bg-red-50/40' : '' }}">
                                 <td class="px-4 py-3">
                                     <p class="font-medium text-stone-800">{{ $farmer->farm_name }}</p>
                                 </td>
@@ -57,28 +67,54 @@
                                 <td class="px-4 py-3 text-center text-stone-600">{{ $farmer->products_count }}</td>
                                 <td class="px-4 py-3 text-center text-stone-600">{{ $farmer->orders_count }}</td>
                                 <td class="px-4 py-3 text-center">
-                                    @if ($farmer->is_verified)
+                                    @if ($expired)
+                                        <span class="inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-semibold text-red-700">Expired</span>
+                                    @elseif ($farmer->is_verified)
                                         <span class="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-xs font-semibold text-green-700">Verified</span>
                                     @else
                                         <span class="inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700">Pending</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3 text-right">
-                                    @if ($farmer->is_verified)
-                                        <form method="POST" action="{{ route('admin.farmers.unverify', $farmer) }}" class="inline">
-                                            @csrf
-                                            <button type="submit"
-                                                onclick="return confirm('Remove verification from {{ addslashes($farmer->farm_name) }}?')"
-                                                class="text-xs font-medium text-red-600 hover:text-red-800 transition">
-                                                Unverify
-                                            </button>
-                                        </form>
+                                <td class="px-4 py-3 text-center">
+                                    @if ($expired)
+                                        <span class="text-xs font-bold text-red-600">Expired</span>
+                                    @elseif ($days !== null)
+                                        @php
+                                            $colour = $days <= 5
+                                                ? 'text-red-600'
+                                                : ($days <= 15 ? 'text-amber-600' : 'text-green-600');
+                                        @endphp
+                                        <span class="text-xs font-bold {{ $colour }}">{{ $days }}d</span>
                                     @else
+                                        <span class="text-xs text-stone-400">&mdash;</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 text-right">
+                                    @if ($farmer->is_verified && ! $expired)
+                                        <div class="flex items-center justify-end gap-3">
+                                            <form method="POST" action="{{ route('admin.farmers.verify', $farmer) }}" class="inline">
+                                                @csrf
+                                                <button type="submit"
+                                                    onclick="return confirm('Renew 30-day verification for {{ addslashes($farmer->farm_name) }}?')"
+                                                    class="text-xs font-medium text-brand-600 hover:text-brand-800 transition">
+                                                    Renew
+                                                </button>
+                                            </form>
+                                            <form method="POST" action="{{ route('admin.farmers.unverify', $farmer) }}" class="inline">
+                                                @csrf
+                                                <button type="submit"
+                                                    onclick="return confirm('Remove verification from {{ addslashes($farmer->farm_name) }}?')"
+                                                    class="text-xs font-medium text-red-600 hover:text-red-800 transition">
+                                                    Unverify
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @elseif ($expired || ! $farmer->is_verified)
                                         <form method="POST" action="{{ route('admin.farmers.verify', $farmer) }}" class="inline">
                                             @csrf
                                             <button type="submit"
                                                 class="text-xs font-medium text-brand-600 hover:text-brand-800 transition">
-                                                Verify
+                                                {{ $expired ? 'Re-verify' : 'Verify' }}
                                             </button>
                                         </form>
                                     @endif
