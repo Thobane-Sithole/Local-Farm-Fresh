@@ -45,6 +45,6 @@ class CommunityController extends Controller
 
         $post->delete();
 
-        return back()->with('status', 'Post removed.');
+        return redirect()->route('community.index')->with('status', 'Post removed.');
     }
 }

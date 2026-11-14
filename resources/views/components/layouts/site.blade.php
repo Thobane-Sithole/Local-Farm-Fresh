@@ -155,6 +155,11 @@
     </header>
 
     <main id="main" class="flex-1">
+        @if (session('status') || session('error'))
+            <div class="mx-auto max-w-7xl px-4 pt-4 sm:px-6 lg:px-8">
+                <x-ui.flash />
+            </div>
+        @endif
         {{ $slot }}
     </main>
 
