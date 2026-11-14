@@ -1,7 +1,7 @@
 <x-layouts.site title="Farm-fresh produce, delivered to your door" description="Discover fresh, locally grown produce from small-scale South African farmers.">
 
     {{-- ─── Hero ──────────────────────────────────────────────────────────── --}}
-    <section class="relative isolate flex min-h-[520px] items-center overflow-hidden">
+    <section class="relative isolate overflow-hidden">
         <img
             src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1600&h=700&fit=crop&q=80&auto=format"
             alt=""
@@ -12,22 +12,42 @@
         <div class="absolute inset-0 bg-brand-900/80" aria-hidden="true"></div>
 
         <div class="relative mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-            <div class="max-w-lg motion-hero">
-                <p class="text-xs font-bold uppercase tracking-[0.2em] text-brand-300">South Africa's farm marketplace</p>
-                <h1 class="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-[3.5rem]">
-                    Fresh from the farm,<br>straight to your door.
-                </h1>
-                <p class="mt-5 max-w-md text-lg/relaxed text-white/80">
-                    Seasonal produce grown close to home. Support local farmers and eat better.
-                </p>
-                <div class="mt-8 flex flex-wrap gap-3">
-                    <x-ui.button :href="Route::has('shop.index') ? route('shop.index') : route('register')" variant="inverse" size="lg">
-                        Browse the shop
-                    </x-ui.button>
-                    <x-ui.button :href="route('farmer.register')" variant="glass" size="lg">
-                        Start selling
-                    </x-ui.button>
+            <div class="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+
+                {{-- Text --}}
+                <div class="motion-hero">
+                    <p class="text-xs font-bold uppercase tracking-[0.2em] text-brand-300">South Africa's farm marketplace</p>
+                    <h1 class="mt-3 text-4xl font-extrabold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-[3.5rem]">
+                        Fresh from the farm,<br>straight to your door.
+                    </h1>
+                    <p class="mt-5 max-w-md text-lg/relaxed text-white/80">
+                        Seasonal produce grown close to home. Support local farmers and eat better.
+                    </p>
+                    <div class="mt-8 flex flex-wrap gap-3">
+                        <x-ui.button :href="Route::has('shop.index') ? route('shop.index') : route('register')" variant="inverse" size="lg">
+                            Browse the shop
+                        </x-ui.button>
+                        <x-ui.button :href="route('farmer.register')" variant="glass" size="lg">
+                            Start selling
+                        </x-ui.button>
+                    </div>
                 </div>
+
+                {{-- Video --}}
+                @if (config('app.hero_video_url'))
+                <div class="flex justify-center lg:justify-end">
+                    <div class="w-full max-w-md overflow-hidden rounded-2xl ring-1 ring-white/20 shadow-[0_8px_48px_rgba(0,0,0,0.65)] lg:max-w-none">
+                        <video
+                            autoplay muted loop playsinline
+                            class="block w-full h-auto"
+                            aria-label="Local Farm Fresh showcase"
+                        >
+                            <source src="{{ config('app.hero_video_url') }}" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
+                @endif
+
             </div>
         </div>
     </section>

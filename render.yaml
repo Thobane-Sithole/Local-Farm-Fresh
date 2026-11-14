@@ -53,3 +53,5 @@ services:
         sync: false
       - key: CLOUDINARY_URL
         sync: false
+      - key: HERO_VIDEO_URL
+        sync: false

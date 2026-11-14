@@ -54,6 +54,8 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
+    'hero_video_url' => env('HERO_VIDEO_URL'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
