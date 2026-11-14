@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Event;
 use App\Models\FarmerProfile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
@@ -23,6 +24,8 @@ class HomeController extends Controller
             ->withCount(['products' => fn ($q) => $q->visible()])
             ->get());
 
-        return view('home', compact('farms', 'categories'));
+        $upcomingEvents = Event::upcoming()->orderBy('starts_at')->limit(3)->get();
+
+        return view('home', compact('farms', 'categories', 'upcomingEvents'));
     }
 }

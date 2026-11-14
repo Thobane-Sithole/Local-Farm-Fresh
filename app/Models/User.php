@@ -21,6 +21,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'phone',
         'password',
@@ -67,6 +68,26 @@ class User extends Authenticatable
     public function cart(): HasOne
     {
         return $this->hasOne(Cart::class);
+    }
+
+    public function communityPosts(): HasMany
+    {
+        return $this->hasMany(CommunityPost::class);
+    }
+
+    public function communityComments(): HasMany
+    {
+        return $this->hasMany(CommunityComment::class);
+    }
+
+    public function eventComments(): HasMany
+    {
+        return $this->hasMany(EventComment::class);
+    }
+
+    public function hasUsername(): bool
+    {
+        return ! empty($this->username);
     }
 
     // ---- Role helpers --------------------------------------------------

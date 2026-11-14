@@ -21,10 +21,16 @@ use App\Http\Controllers\Farmer\DashboardController as FarmerDashboardController
 use App\Http\Controllers\Farmer\FarmProfileController;
 use App\Http\Controllers\Farmer\OrderController as FarmerOrderController;
 use App\Http\Controllers\Farmer\ProductController;
+use App\Http\Controllers\CommunityCommentController;
+use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\EventCommentController;
+use App\Http\Controllers\EventPageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductPageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\UsernameController;
+use App\Http\Controllers\Admin\EventController as AdminEventController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,6 +39,23 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 Route::get('/', HomeController::class)->name('home');
+
+// Community — public read, auth write
+Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
+Route::get('/community/{post}', [CommunityController::class, 'show'])->name('community.show');
+Route::middleware(['auth', 'has.username'])->group(function () {
+    Route::post('/community', [CommunityController::class, 'store'])->name('community.store');
+    Route::post('/community/{post}/comments', [CommunityCommentController::class, 'store'])->name('community.comments.store');
+});
+Route::middleware('auth')->group(function () {
+    Route::delete('/community/comments/{comment}', [CommunityCommentController::class, 'destroy'])->name('community.comments.destroy');
+    Route::delete('/community/{post}', [CommunityController::class, 'destroy'])->name('community.destroy');
+});
+
+// Events — public read, auth comment
+Route::get('/events/{event}', [EventPageController::class, 'show'])->name('events.show');
+Route::middleware('auth')->post('/events/{event}/comments', [EventCommentController::class, 'store'])->name('events.comments.store');
+Route::middleware('auth')->delete('/events/comments/{comment}', [EventCommentController::class, 'destroy'])->name('events.comments.destroy');
 
 // Cloudinary browser-direct upload signature (auth required)
 Route::middleware('auth')->get('/api/cloudinary/sign', CloudinarySignatureController::class)->name('api.cloudinary.sign');
@@ -74,6 +97,10 @@ Route::middleware('auth')->group(function () {
     // Notifications (any auth role)
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+    // Username setup
+    Route::get('/username/setup', [UsernameController::class, 'edit'])->name('username.edit');
+    Route::post('/username/setup', [UsernameController::class, 'update'])->name('username.update');
 
     // Breeze profile management (all roles)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -124,6 +151,11 @@ Route::middleware('auth')->group(function () {
         // All orders
         Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
+
+        // Events
+        Route::resource('events', AdminEventController::class)->except(['show']);
+
+        // Community moderation (destroy handled by controllers via abort_unless isAdmin)
     });
 });
 

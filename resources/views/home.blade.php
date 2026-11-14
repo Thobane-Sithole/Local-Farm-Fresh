@@ -118,6 +118,39 @@
         </div>
     </section>
 
+    {{-- ─── Upcoming events ───────────────────────────────────────────────── --}}
+    @if ($upcomingEvents->isNotEmpty())
+        <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
+            <div class="flex items-end justify-between">
+                <div>
+                    <h2 class="text-2xl font-extrabold tracking-tight text-ink">Farmers Market Events</h2>
+                    <p class="mt-1 text-sm text-muted">Join us at these upcoming markets.</p>
+                </div>
+            </div>
+            <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($upcomingEvents as $event)
+                    <a href="{{ route('events.show', $event) }}"
+                       class="group relative overflow-hidden rounded-2xl bg-brand-900 shadow-md ring-1 ring-line/60 transition-all hover:shadow-lg hover:ring-brand-400/50">
+                        @if ($event->poster_url)
+                            <img src="{{ $event->poster_url }}" alt="{{ $event->title }}"
+                                 class="absolute inset-0 h-full w-full object-cover opacity-40 transition-transform duration-300 group-hover:scale-105">
+                        @else
+                            <div class="absolute inset-0 bg-gradient-to-br from-brand-800 to-brand-950"></div>
+                        @endif
+                        <div class="relative p-5">
+                            <p class="text-xs font-bold uppercase tracking-widest text-brand-300">
+                                {{ $event->starts_at->format('d M Y') }}
+                            </p>
+                            <h3 class="mt-1 text-base font-extrabold leading-snug text-white">{{ $event->title }}</h3>
+                            <p class="mt-1 text-sm text-white/70">{{ $event->location }}</p>
+                            <span class="mt-3 inline-block text-xs font-semibold text-brand-300 group-hover:underline">Learn more →</span>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </section>
+    @endif
+
     {{-- ─── Farms selling here ──────────────────────────────────────────────── --}}
     @if ($farms->isNotEmpty())
         <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">

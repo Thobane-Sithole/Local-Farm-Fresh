@@ -7,6 +7,7 @@
         ['Shop', 'shop.index'],
         ['Categories', 'categories.index'],
         ['Farmers', 'farmers.index'],
+        ['Community', 'community.index'],
         ['About', 'about'],
     ])->filter(fn ($l) => Route::has($l[1]));
 @endphp
