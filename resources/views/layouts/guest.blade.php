@@ -4,7 +4,7 @@
     <x-layouts.head :title="$title ?? null" />
 </head>
 <body class="min-h-screen bg-white">
-    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2">Skip to form</a>
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:opacity-90">Skip to form</a>
 
     <div class="lg:grid lg:min-h-screen lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         {{-- Brand panel: a slim band on phones, a full column on large screens --}}
