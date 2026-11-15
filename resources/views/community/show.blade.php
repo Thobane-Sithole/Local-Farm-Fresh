@@ -10,7 +10,7 @@
         <article class="rounded-card bg-white p-6 shadow-card ring-1 ring-line/60">
             <div class="flex items-start justify-between gap-4">
                 <div>
-                    <span class="text-sm font-bold text-ink">@{{ $post->user->username ?? $post->user->name }}</span>
+                    <span class="text-sm font-bold text-ink">@<span>{{ $post->user->username ?? $post->user->name }}</span></span>
                     <span class="ml-2 text-xs text-muted">{{ $post->created_at->diffForHumans() }}</span>
                 </div>
                 @if (auth()->check() && (auth()->user()->isAdmin() || $post->user_id === auth()->id()))
@@ -37,7 +37,7 @@
                         <div class="flex gap-3 rounded-card bg-white p-4 shadow-card ring-1 ring-line/60">
                             <div class="flex-1 min-w-0">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-sm font-bold text-ink">@{{ $comment->user->username ?? $comment->user->name }}</span>
+                                    <span class="text-sm font-bold text-ink">@<span>{{ $comment->user->username ?? $comment->user->name }}</span></span>
                                     <span class="text-xs text-muted">{{ $comment->created_at->diffForHumans() }}</span>
                                 </div>
                                 <p class="mt-1 text-sm text-ink">{{ $comment->body }}</p>

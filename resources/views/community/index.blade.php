@@ -24,7 +24,7 @@
                             <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                         @enderror
                         <div class="mt-3 flex items-center justify-between">
-                            <span class="text-xs text-muted">Posting as <strong class="text-ink">@{{ auth()->user()->username }}</strong></span>
+                            <span class="text-xs text-muted">Posting as <strong class="text-ink">@<span>{{ auth()->user()->username }}</span></strong></span>
                             <x-ui.button type="submit" size="sm">Post</x-ui.button>
                         </div>
                     </form>
@@ -53,7 +53,7 @@
                         <div class="flex items-start justify-between gap-4">
                             <div class="min-w-0">
                                 <div class="flex items-center gap-2">
-                                    <span class="text-sm font-bold text-ink">@{{ $post->user->username ?? $post->user->name }}</span>
+                                    <span class="text-sm font-bold text-ink">@<span>{{ $post->user->username ?? $post->user->name }}</span></span>
                                     <span class="text-xs text-muted">· {{ $post->created_at->diffForHumans() }}</span>
                                 </div>
                                 <p class="mt-2 whitespace-pre-line text-sm text-ink">{{ Str::limit($post->body, 300) }}</p>
