@@ -11,9 +11,6 @@ use PHPUnit\Framework\Attributes\BeforeClass;
 
 abstract class DuskTestCase extends BaseTestCase
 {
-    /**
-     * Prepare for Dusk test execution.
-     */
     #[BeforeClass]
     public static function prepare(): void
     {
@@ -22,9 +19,6 @@ abstract class DuskTestCase extends BaseTestCase
         }
     }
 
-    /**
-     * Create the RemoteWebDriver instance.
-     */
     protected function driver(): RemoteWebDriver
     {
         $options = (new ChromeOptions)->addArguments(collect([
@@ -44,5 +38,15 @@ abstract class DuskTestCase extends BaseTestCase
                 ChromeOptions::CAPABILITY, $options
             )
         );
+    }
+
+    /**
+     * Override the base URL to use port 9000.
+     * On Windows, PHP's built-in server binds to IPv6, so "localhost" works
+     * but "127.0.0.1" times out.
+     */
+    public function baseUrl(): string
+    {
+        return env('APP_URL', 'http://localhost:9000');
     }
 }
