@@ -9,6 +9,7 @@ use App\Services\OrderService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -66,5 +67,27 @@ class OrderController extends Controller
         $this->orders->advanceStatus($order, $next, $request->user(), $data['note'] ?? null);
 
         return back()->with('status', "Order {$order->order_number} updated to {$next->label()}.");
+    }
+
+    /**
+     * Confirm delivery by verifying the customer's 4-digit OTP.
+     * Prevents a farmer marking an order as delivered without physically handing it over.
+     */
+    public function confirmDelivery(Request $request, Order $order): RedirectResponse
+    {
+        abort_unless($order->farmer_profile_id === $request->user()->farmerProfile?->id, 403);
+        abort_unless($order->status === OrderStatus::OutForDelivery, 400, 'Order is not out for delivery.');
+
+        $data = $request->validate([
+            'delivery_otp' => ['required', 'string', 'digits:4'],
+        ]);
+
+        if ($order->delivery_otp !== $data['delivery_otp']) {
+            return back()->withErrors(['delivery_otp' => 'Incorrect delivery code. Ask the customer for the 4-digit code shown on their order page.']);
+        }
+
+        $this->orders->advanceStatus($order, OrderStatus::Delivered, $request->user(), 'Delivery confirmed with customer OTP');
+
+        return back()->with('status', "Order {$order->order_number} marked as delivered.");
     }
 }

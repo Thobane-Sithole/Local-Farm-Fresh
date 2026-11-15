@@ -128,6 +128,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders', [FarmerOrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order:order_number}', [FarmerOrderController::class, 'show'])->name('orders.show');
         Route::patch('/orders/{order:order_number}/status', [FarmerOrderController::class, 'updateStatus'])->name('orders.status');
+        Route::post('/orders/{order:order_number}/confirm-delivery', [FarmerOrderController::class, 'confirmDelivery'])->name('orders.confirm-delivery');
         Route::get('/analytics', FarmerAnalyticsController::class)->name('analytics');
     });
 

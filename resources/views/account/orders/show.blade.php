@@ -50,6 +50,17 @@
             </div>
         @endif
 
+        {{-- Delivery OTP — shown when order is out for delivery --}}
+        @if ($order->status === \App\Enums\OrderStatus::OutForDelivery && $order->delivery_otp)
+            <div class="bg-brand-50 rounded-2xl border-2 border-brand-400 p-5 mb-5 text-center">
+                <p class="text-sm font-semibold text-brand-700 uppercase tracking-wide mb-2">Your delivery code</p>
+                <p class="font-mono text-5xl font-black tracking-[0.3em] text-brand-800">{{ $order->delivery_otp }}</p>
+                <p class="mt-3 text-sm text-stone-600">
+                    Your driver is on the way. When they arrive, give them this 4-digit code to confirm your delivery.
+                </p>
+            </div>
+        @endif
+
         {{-- Order items --}}
         <div class="bg-white rounded-2xl border border-stone-200 p-5 mb-5">
             <div class="flex items-center justify-between mb-3">

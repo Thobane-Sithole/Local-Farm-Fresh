@@ -35,8 +35,53 @@
             </div>
         @endif
 
-        {{-- Status update panel --}}
-        @if ($order->status->isOpen() && count($transitions) > 0)
+        {{-- Delivery OTP verification (shown instead of normal status update when out for delivery) --}}
+        @if ($order->status === \App\Enums\OrderStatus::OutForDelivery)
+            <div class="bg-white rounded-2xl border border-brand-200 p-5 mb-5">
+                <h2 class="font-semibold text-stone-800 mb-1">Confirm delivery</h2>
+                <p class="text-sm text-stone-500 mb-4">Ask the customer for the 4-digit code shown on their order page, then enter it here to confirm delivery.</p>
+                <form method="POST" action="{{ route('farmer.orders.confirm-delivery', $order->order_number) }}" class="flex flex-col sm:flex-row gap-3">
+                    @csrf
+                    <div class="flex-1">
+                        <input
+                            type="text"
+                            name="delivery_otp"
+                            inputmode="numeric"
+                            maxlength="4"
+                            placeholder="0000"
+                            autocomplete="off"
+                            class="w-full rounded-xl border border-stone-300 px-4 py-2.5 text-center font-mono text-2xl font-bold tracking-[0.4em] focus:border-brand-500 focus:ring-brand-500 @error('delivery_otp') border-red-400 @enderror"
+                        />
+                        @error('delivery_otp')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <button type="submit"
+                        class="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 transition">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        Confirm delivery
+                    </button>
+                </form>
+
+                {{-- Still allow Cancel --}}
+                @if (in_array(\App\Enums\OrderStatus::Cancelled, $transitions))
+                    <div class="mt-3 border-t border-stone-100 pt-3">
+                        <form method="POST" action="{{ route('farmer.orders.status', $order->order_number) }}">
+                            @csrf @method('PATCH')
+                            <input type="hidden" name="status" value="cancelled">
+                            <input type="hidden" name="note" id="cancel-note-otp">
+                            <button type="button"
+                                onclick="document.getElementById('cancel-note-otp').value = prompt('Reason for cancellation (optional):') ?? ''; this.closest('form').submit()"
+                                class="text-sm font-medium text-red-600 hover:text-red-800">
+                                Cancel order instead
+                            </button>
+                        </form>
+                    </div>
+                @endif
+            </div>
+
+        {{-- Normal status update panel for all other open statuses --}}
+        @elseif ($order->status->isOpen() && count($transitions) > 0)
             <div class="bg-white rounded-2xl border border-stone-200 p-5 mb-5" x-data="{ note: '' }">
                 <h2 class="font-semibold text-stone-800 mb-3">Update status</h2>
                 <div class="flex flex-wrap gap-2">

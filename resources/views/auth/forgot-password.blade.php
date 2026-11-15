@@ -1,25 +1,20 @@
 <x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+    <x-slot:title>Reset password</x-slot:title>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <h1 class="text-2xl font-extrabold tracking-tight text-ink sm:text-3xl">Forgot your password?</h1>
+    <p class="mt-2 text-muted">Enter your email address and we'll send a 6-digit verification code to reset your password.</p>
 
-    <form method="POST" action="{{ route('password.email') }}">
+    <x-ui.flash class="mt-6" />
+
+    <form method="POST" action="{{ route('password.email') }}" class="mt-8 space-y-5" novalidate>
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        <x-ui.input name="email" type="email" label="Email address" required autofocus autocomplete="username" inputmode="email" />
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
+        <x-ui.button class="w-full" size="lg">Send reset code</x-ui.button>
     </form>
+
+    <p class="mt-6 text-center text-sm text-muted">
+        <a href="{{ route('login') }}" class="font-semibold text-brand-600 hover:text-brand-800">Back to log in</a>
+    </p>
 </x-guest-layout>

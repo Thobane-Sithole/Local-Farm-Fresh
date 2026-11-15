@@ -125,6 +125,11 @@ class OrderService
             if ($next === OrderStatus::Cancelled && $note) {
                 $fields['cancellation_reason'] = $note;
             }
+            // Generate a 4-digit delivery OTP when the order goes out for delivery.
+            // The customer shares this code with the driver to confirm receipt.
+            if ($next === OrderStatus::OutForDelivery) {
+                $fields['delivery_otp'] = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+            }
 
             $order->forceFill($fields)->save();
 

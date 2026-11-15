@@ -4,9 +4,10 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\LoginOtpController;
 use App\Http\Controllers\Auth\NewPasswordController;
+use App\Http\Controllers\Auth\OtpPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -22,17 +23,23 @@ Route::middleware('guest')->group(function () {
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+    // 2FA — OTP step after credentials are accepted
+    Route::get('login/otp', [LoginOtpController::class, 'create'])->name('login.otp');
+    Route::post('login/otp', [LoginOtpController::class, 'store']);
+    Route::post('login/otp/resend', [LoginOtpController::class, 'resend'])->name('login.otp.resend');
+
+    // Forgot password — OTP-based flow (replaces the token-link flow)
+    Route::get('forgot-password', [OtpPasswordController::class, 'create'])
         ->name('password.request');
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+    Route::post('forgot-password', [OtpPasswordController::class, 'sendOtp'])
         ->name('password.email');
 
-    Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
-        ->name('password.reset');
+    Route::get('forgot-password/verify', [OtpPasswordController::class, 'showVerify'])
+        ->name('password.otp.verify');
 
-    Route::post('reset-password', [NewPasswordController::class, 'store'])
-        ->name('password.store');
+    Route::post('forgot-password/verify', [OtpPasswordController::class, 'resetWithOtp'])
+        ->name('password.otp.reset');
 });
 
 Route::middleware('auth')->group(function () {
