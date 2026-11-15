@@ -16,6 +16,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
+            // Drop the unique index first — required by SQLite before dropping the column
+            $table->dropUnique('users_username_unique');
             $table->dropColumn('username');
         });
     }

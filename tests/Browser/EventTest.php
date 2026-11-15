@@ -33,7 +33,7 @@ class EventTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($event) {
             $browser->visit('/events/' . $event->id)
                     ->assertSee('Log in')
-                    ->assertDontSee('Are you going?');
+                    ->assertNotPresent('#event-comment');
         });
     }
 
@@ -45,7 +45,7 @@ class EventTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($event, $user) {
             $browser->loginAs($user)
                     ->visit('/events/' . $event->id)
-                    ->assertSee('Are you going?')
+                    ->assertPresent('#event-comment')
                     ->type('textarea', 'Excited to attend!')
                     ->press('Comment')
                     ->waitForText('Excited to attend!', 5)
