@@ -11,6 +11,7 @@
 .env
 .env.backup
 .env.production
+.env.dusk.local
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
@@ -23,3 +24,4 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+/public/lff_video.mp4
