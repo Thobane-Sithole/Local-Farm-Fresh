@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\CheckSessionActivity;
 use App\Http\Middleware\EnsureAccountIsActive;
 use App\Http\Middleware\EnsureUserHasRole;
 use App\Http\Middleware\SecurityHeaders;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             EnsureAccountIsActive::class,
+            CheckSessionActivity::class,
             SecurityHeaders::class,
         ]);
 

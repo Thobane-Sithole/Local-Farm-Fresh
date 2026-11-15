@@ -40,6 +40,9 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', HomeController::class)->name('home');
 
+// Keep-alive: authenticated users ping this to reset their idle timer
+Route::middleware('auth')->post('/keep-alive', fn () => response()->noContent())->name('keep-alive');
+
 // Community — public read, auth write
 Route::get('/community', [CommunityController::class, 'index'])->name('community.index');
 Route::get('/community/{post}', [CommunityController::class, 'show'])->name('community.show');

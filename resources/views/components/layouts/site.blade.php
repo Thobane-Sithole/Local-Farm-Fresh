@@ -163,6 +163,8 @@
         {{ $slot }}
     </main>
 
+    <x-idle-timeout />
+
     <footer class="bg-brand-900 text-brand-100">
         <div class="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
             <div>

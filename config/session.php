@@ -34,6 +34,10 @@ return [
 
     'lifetime' => (int) env('SESSION_LIFETIME', 120),
 
+    // Minutes of inactivity before the user is auto-logged out.
+    // Defaults to SESSION_LIFETIME when not set.
+    'idle_timeout' => (int) env('IDLE_TIMEOUT', env('SESSION_LIFETIME', 30)),
+
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
 
     /*
