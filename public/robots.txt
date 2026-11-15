@@ -1,2 +1,15 @@
 User-agent: *
-Disallow:
+Disallow: /admin
+Disallow: /farmer
+Disallow: /account
+Disallow: /profile
+Disallow: /checkout
+Disallow: /cart
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /verify-email
+Disallow: /two-factor-challenge
+
+Sitemap: https://local-farm-fresh.onrender.com/sitemap.xml
