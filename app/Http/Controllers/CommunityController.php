@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommunityPost;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -27,14 +28,28 @@ class CommunityController extends Controller
         return view('community.show', compact('post', 'comments'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate(['body' => ['required', 'string', 'max:2000']]);
 
-        CommunityPost::create([
+        $post = CommunityPost::create([
             'user_id' => auth()->id(),
             'body'    => $request->body,
         ]);
+
+        $post->load('user');
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                'post' => [
+                    'id'         => $post->id,
+                    'body'       => $post->body,
+                    'username'   => $post->user->username ?? $post->user->name,
+                    'show_url'   => route('community.show', $post),
+                    'delete_url' => route('community.destroy', $post),
+                ],
+            ]);
+        }
 
         return back()->with('status', 'Post shared with the community!');
     }

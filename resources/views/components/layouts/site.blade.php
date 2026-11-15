@@ -55,7 +55,7 @@
             var a=e.target.closest('a[href]');
             if(a&&a.href&&a.target!=='_blank'&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey&&!a.href.startsWith('#')&&!a.href.startsWith('javascript:')){show();}
         });
-        document.addEventListener('submit',show);
+        document.addEventListener('submit',function(e){if(!e.defaultPrevented)show();});
         window.addEventListener('pageshow',hide);
     })();
     </script>
