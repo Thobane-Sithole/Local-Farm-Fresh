@@ -13,6 +13,7 @@
         'cog'   => 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7.4-3a7.4 7.4 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7.5 7.5 0 0 0-2-1.2L14.5 3h-5l-.4 2.6a7.5 7.5 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7.4 7.4 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7.5 7.5 0 0 0 2 1.2l.4 2.6h5l.4-2.6a7.5 7.5 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.1-.4.1-.8.1-1.2Z',
         'chart'    => 'M3 3v18h18M7 16l4-4 4 4 4-4',
         'calendar' => 'M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5',
+        'chat'     => 'M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z',
     ];
 
     $nav = [
@@ -22,6 +23,7 @@
             ['Add product', 'farmer.products.create', 'plus'],
             ['Orders', 'farmer.orders.index', 'receipt'],
             ['Analytics', 'farmer.analytics', 'chart'],
+            ['Community', 'community.index', 'chat'],
             ['Notifications', 'notifications.index', 'bell'],
             ['Farm profile', 'farmer.profile.edit', 'user'],
             ['Settings', 'profile.edit', 'cog'],
@@ -34,6 +36,7 @@
             ['Categories', 'admin.categories.index', 'tag'],
             ['Orders', 'admin.orders.index', 'receipt'],
             ['Events', 'admin.events.index', 'calendar'],
+            ['Community', 'community.index', 'chat'],
             ['Settings', 'profile.edit', 'cog'],
         ],
     ][$area];

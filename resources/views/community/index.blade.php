@@ -29,6 +29,14 @@
                         </div>
                     </form>
                 </div>
+            @else
+                <div class="rounded-card border border-brand-100 bg-brand-50 p-5 mb-8 flex items-center justify-between gap-4">
+                    <div>
+                        <p class="text-sm font-semibold text-ink">Choose a username to start posting</p>
+                        <p class="text-sm text-muted mt-0.5">Pick a community name and join the conversation.</p>
+                    </div>
+                    <x-ui.button :href="route('username.edit')" size="sm">Set username</x-ui.button>
+                </div>
             @endif
         @endauth
 
