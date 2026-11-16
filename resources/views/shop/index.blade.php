@@ -107,9 +107,16 @@
                                             <p class="mt-1 line-clamp-2 text-sm text-muted">{{ $product->short_description }}</p>
                                         @endif
 
-                                        <div class="mt-auto flex items-end justify-between pt-3">
+                                            <div class="mt-auto flex items-end justify-between pt-3">
                                             <span class="font-bold text-brand-700">{{ $product->priceLabel() }}</span>
-                                            <span class="text-xs text-muted">{{ $product->farmerProfile?->farm_name }}</span>
+                                            <div class="flex flex-col items-end gap-1">
+                                                <span class="text-xs text-muted">{{ $product->farmerProfile?->farm_name }}</span>
+                                                @if ($product->quantity_available <= 0)
+                                                    <span class="rounded-full bg-stone-100 px-2 py-0.5 text-[10px] font-semibold text-stone-500">Out of stock</span>
+                                                @elseif ($product->quantity_available <= 5)
+                                                    <span class="rounded-full bg-orange-100 px-2 py-0.5 text-[10px] font-semibold text-orange-700">Only {{ $product->quantity_available }} left</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
                                 </a>

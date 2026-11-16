@@ -67,33 +67,48 @@
                     <p class="mt-4 text-muted">{{ $product->short_description }}</p>
                 @endif
 
-                @if ($product->quantity_available > 0)
+                @if ($product->quantity_available <= 0)
+                    <p class="mt-3 inline-flex items-center rounded-full bg-stone-100 px-3 py-1 text-sm font-semibold text-stone-500">Out of stock</p>
+                @elseif ($product->quantity_available <= 5)
+                    <p class="mt-3 inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-700">
+                        Only {{ $product->quantity_available }} {{ $product->unit->label() }} left
+                    </p>
+                @else
                     <p class="mt-3 text-sm text-muted">{{ $product->quantity_available }} {{ $product->unit->label() }} available</p>
                 @endif
 
                 {{-- Add to cart --}}
-                <div class="mt-6" x-data="{ qty: 1 }">
-                    <form method="POST" action="{{ route('cart.store') }}" class="flex items-center gap-3">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <input type="hidden" name="quantity" x-model="qty">
-                        <div class="flex items-center gap-1 rounded-xl border border-stone-300 px-2 py-1">
-                            <button type="button" @click="qty = Math.max(1, qty - 1)"
-                                class="h-8 w-8 rounded-lg text-stone-600 hover:bg-stone-100 flex items-center justify-center transition">
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
-                            </button>
-                            <span class="w-8 text-center text-sm font-semibold" x-text="qty">1</span>
-                            <button type="button" @click="qty = qty + 1"
-                                class="h-8 w-8 rounded-lg text-stone-600 hover:bg-stone-100 flex items-center justify-center transition">
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
-                            </button>
+                <div class="mt-6">
+                    @if ($product->quantity_available > 0)
+                        <div x-data="{ qty: 1, max: {{ $product->quantity_available }} }">
+                            <form method="POST" action="{{ route('cart.store') }}" class="flex items-center gap-3">
+                                @csrf
+                                <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                <input type="hidden" name="quantity" x-model="qty">
+                                <div class="flex items-center gap-1 rounded-xl border border-stone-300 px-2 py-1">
+                                    <button type="button" @click="qty = Math.max(1, qty - 1)"
+                                        class="h-8 w-8 rounded-lg text-stone-600 hover:bg-stone-100 flex items-center justify-center transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" /></svg>
+                                    </button>
+                                    <span class="w-8 text-center text-sm font-semibold" x-text="qty">1</span>
+                                    <button type="button" @click="qty = Math.min(max, qty + 1)"
+                                        class="h-8 w-8 rounded-lg text-stone-600 hover:bg-stone-100 flex items-center justify-center transition">
+                                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" /></svg>
+                                    </button>
+                                </div>
+                                <button type="submit"
+                                    class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-base font-semibold text-white hover:bg-brand-700 transition">
+                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
+                                    Add to cart
+                                </button>
+                            </form>
                         </div>
-                        <button type="submit"
-                            class="flex-1 inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3 text-base font-semibold text-white hover:bg-brand-700 transition">
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" /></svg>
-                            Add to cart
+                    @else
+                        <button disabled
+                            class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-stone-200 px-6 py-3 text-base font-semibold text-stone-500 cursor-not-allowed">
+                            Out of stock
                         </button>
-                    </form>
+                    @endif
                 </div>
 
                 {{-- Farm info card --}}

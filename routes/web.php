@@ -41,6 +41,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/', HomeController::class)->name('home');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
+Route::post('/cart/replace', [CartController::class, 'replace'])->name('cart.replace');
 
 // Keep-alive: authenticated users ping this to reset their idle timer
 Route::middleware('auth')->post('/keep-alive', fn () => response()->noContent())->name('keep-alive');
