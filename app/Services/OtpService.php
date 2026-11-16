@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Mail\OtpMail;
 use App\Models\Otp;
 use App\Models\User;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class OtpService
@@ -41,12 +42,18 @@ class OtpService
      */
     public function send(Otp $otp, User $user): void
     {
-        // Dev-mode hint stored in session so the view can show it
+        // Dev-mode hint stored in session so the view can show it without email
         if (app()->environment('local') || config('app.debug')) {
             session()->flash('dev_otp', $otp->code);
         }
 
-        Mail::to($user->email)->send(new OtpMail($otp, $user));
+        try {
+            Mail::to($user->email)->send(new OtpMail($otp, $user));
+        } catch (\Throwable $e) {
+            // Log the failure but do not crash the login flow.
+            // In local/dev environments the dev_otp session hint above is enough.
+            Log::error('OTP mail failed', ['email' => $user->email, 'error' => $e->getMessage()]);
+        }
     }
 
     /**
