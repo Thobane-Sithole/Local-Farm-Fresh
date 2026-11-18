@@ -53,7 +53,12 @@
                                             document.getElementById('loc-lng').value = pos.coords.longitude;
                                             document.getElementById('location-form').submit();
                                         },
-                                        (err) => { error = 'Could not get your location. Please allow location access and try again.'; loading = false; }
+                                        (err) => {
+                                            if (err.code === 1) error = 'Location access was blocked. Click the lock icon in your browser address bar, set Location to Allow, then try again.';
+                                            else if (err.code === 2) error = 'Your location could not be determined. Check that location services are enabled on your device.';
+                                            else error = 'Location request timed out. Please try again.';
+                                            loading = false;
+                                        }
                                     );
                                 "
                                 :disabled="loading"

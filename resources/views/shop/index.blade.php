@@ -52,7 +52,7 @@
                                     document.getElementById('shop-loc-lng').value = pos.coords.longitude;
                                     document.getElementById('shop-loc-form').submit();
                                 },
-                                () => { error = 'Location denied'; loading = false; }
+                                (err) => { error = err.code === 1 ? 'Blocked — click the lock icon in the address bar and set Location to Allow' : 'Could not get location'; loading = false; }
                             );
                         "
                         :disabled="loading"
