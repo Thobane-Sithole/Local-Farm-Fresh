@@ -16,7 +16,7 @@ class SecurityHeaders
         $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
-        $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+        $response->headers->set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(self)');
         $response->headers->set(
             'Content-Security-Policy',
             "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' cdn.jsdelivr.net unpkg.com cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com; font-src 'self' fonts.gstatic.com data:; img-src 'self' data: blob: res.cloudinary.com images.unsplash.com; media-src 'self' res.cloudinary.com; connect-src 'self'; frame-ancestors 'none';"
