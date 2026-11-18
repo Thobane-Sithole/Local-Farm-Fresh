@@ -58,7 +58,8 @@
                                             else if (err.code === 2) error = 'Your location could not be determined. Check that location services are enabled on your device.';
                                             else error = 'Location request timed out. Please try again.';
                                             loading = false;
-                                        }
+                                        },
+                                        { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
                                     );
                                 "
                                 :disabled="loading"

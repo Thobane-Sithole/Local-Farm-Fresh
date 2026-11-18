@@ -98,7 +98,7 @@
                                  this.status = 'Could not get location: ' + err.message;
                                  this.loading = false;
                              },
-                             { enableHighAccuracy: true, timeout: 10000 }
+                             { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
                          );
                      }
                  }">

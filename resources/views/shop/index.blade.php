@@ -52,7 +52,8 @@
                                     document.getElementById('shop-loc-lng').value = pos.coords.longitude;
                                     document.getElementById('shop-loc-form').submit();
                                 },
-                                (err) => { error = err.code === 1 ? 'Blocked — click the lock icon in the address bar and set Location to Allow' : 'Could not get location'; loading = false; }
+                                (err) => { error = err.code === 1 ? 'Blocked — click the lock icon in the address bar and set Location to Allow' : 'Could not get location'; loading = false; },
+                                { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
                             );
                         "
                         :disabled="loading"
