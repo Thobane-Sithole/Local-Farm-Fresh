@@ -24,6 +24,8 @@ class UpdateFarmProfileRequest extends FormRequest
             'town' => ['nullable', 'string', 'max:120'],
             'farm_address' => ['nullable', 'string', 'max:255'],
             'delivery_fee' => ['required', 'numeric', 'min:0', 'max:9999.99'],
+            'latitude'     => ['nullable', 'numeric', 'between:-90,90'],
+            'longitude'    => ['nullable', 'numeric', 'between:-180,180'],
             'profile_image' => ['nullable', 'image', 'max:5120', 'mimes:jpeg,png,webp'],
         ];
     }

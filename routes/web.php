@@ -31,6 +31,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UsernameController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,6 +43,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', HomeController::class)->name('home');
 Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::post('/cart/replace', [CartController::class, 'replace'])->name('cart.replace');
+Route::post('/location', [LocationController::class, 'store'])->name('location.store');
+Route::delete('/location', [LocationController::class, 'clear'])->name('location.clear');
 
 // Keep-alive: authenticated users ping this to reset their idle timer
 Route::middleware('auth')->post('/keep-alive', fn () => response()->noContent())->name('keep-alive');

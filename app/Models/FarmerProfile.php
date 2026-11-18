@@ -22,6 +22,8 @@ class FarmerProfile extends Model
         'town',
         'farm_address',
         'delivery_fee',
+        'latitude',
+        'longitude',
     ];
 
     protected function casts(): array
@@ -95,6 +97,22 @@ class FarmerProfile extends Model
         return collect([$this->town ?: $this->municipality, $this->province?->label()])
             ->filter()
             ->implode(', ');
+    }
+
+    /**
+     * Filter to farms within $km kilometres of a coordinate, ordered by distance.
+     * Only farms with lat/lng set are included.
+     */
+    public function scopeNearby(Builder $query, float $lat, float $lng, float $km = 5): Builder
+    {
+        $haversine = '(6371 * acos(LEAST(1.0, cos(radians(?)) * cos(radians(latitude)) * cos(radians(longitude) - radians(?)) + sin(radians(?)) * sin(radians(latitude)))))';
+
+        return $query
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude')
+            ->whereRaw("{$haversine} <= ?", [$lat, $lng, $lat, $km])
+            ->selectRaw("*, {$haversine} as distance_km", [$lat, $lng, $lat])
+            ->orderBy('distance_km');
     }
 
     /** Farmers whose account is active and verification has not expired. */

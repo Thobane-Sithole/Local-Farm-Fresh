@@ -9,13 +9,23 @@ class FarmerPageController extends Controller
 {
     public function index(): View
     {
-        $farmers = FarmerProfile::listed()
-            ->withCount(['products' => fn ($q) => $q->visible()])
-            ->with('user')
-            ->orderBy('farm_name')
-            ->paginate(20);
+        $lat = session('customer_lat');
+        $lng = session('customer_lng');
+        $hasLocation = $lat !== null && $lng !== null;
 
-        return view('shop.farmers', compact('farmers'));
+        $query = FarmerProfile::listed()
+            ->withCount(['products' => fn ($q) => $q->visible()])
+            ->with('user');
+
+        if ($hasLocation) {
+            $query->nearby((float) $lat, (float) $lng, 5);
+        } else {
+            $query->orderBy('farm_name');
+        }
+
+        $farmers = $query->paginate(20);
+
+        return view('shop.farmers', compact('farmers', 'hasLocation'));
     }
 
     public function show(FarmerProfile $farmerProfile): View

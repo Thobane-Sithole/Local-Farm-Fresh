@@ -27,6 +27,51 @@
             </form>
         </div>
 
+        {{-- Location banner --}}
+        @if (! $hasLocation)
+            <div class="mt-5 flex items-center justify-between gap-4 rounded-xl border border-brand-200 bg-brand-50 px-4 py-3"
+                 x-data="{ loading: false, error: '' }">
+                <div class="flex items-center gap-2 min-w-0">
+                    <svg class="h-4 w-4 shrink-0 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>
+                    <span class="text-sm font-medium text-brand-800 truncate">Allow location to see farms within 5 km</span>
+                    <span x-show="error" x-cloak x-text="error" class="text-xs text-red-600 truncate"></span>
+                </div>
+                <div class="flex shrink-0 items-center gap-2">
+                    <form id="shop-loc-form" method="POST" action="{{ route('location.store') }}">
+                        @csrf
+                        <input type="hidden" name="latitude"  id="shop-loc-lat">
+                        <input type="hidden" name="longitude" id="shop-loc-lng">
+                    </form>
+                    <button type="button"
+                        @click="
+                            loading = true; error = '';
+                            if (!navigator.geolocation) { error = 'Not supported'; loading = false; return; }
+                            navigator.geolocation.getCurrentPosition(
+                                (pos) => {
+                                    document.getElementById('shop-loc-lat').value = pos.coords.latitude;
+                                    document.getElementById('shop-loc-lng').value = pos.coords.longitude;
+                                    document.getElementById('shop-loc-form').submit();
+                                },
+                                () => { error = 'Location denied'; loading = false; }
+                            );
+                        "
+                        :disabled="loading"
+                        class="inline-flex items-center gap-1.5 rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-60 transition">
+                        <span x-text="loading ? 'Getting…' : 'Allow'"></span>
+                    </button>
+                </div>
+            </div>
+        @else
+            <div class="mt-5 flex items-center gap-3 text-sm text-muted">
+                <svg class="h-4 w-4 text-brand-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/></svg>
+                <span>Showing farms within 5 km</span>
+                <form method="POST" action="{{ route('location.clear') }}" class="inline">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="font-semibold text-brand-600 hover:text-brand-800">Clear</button>
+                </form>
+            </div>
+        @endif
+
         <div class="mt-6 flex flex-col gap-6 lg:flex-row lg:items-start">
 
             {{-- Category sidebar --}}
